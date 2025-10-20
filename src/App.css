@@ -1,0 +1,26 @@
+/* Scope demo styles so they don't interfere with the login page layout */
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+/* The sample Vite logo styles are kept but neutralized for your app */
+.logo {
+  height: 6em;
+  padding: 0;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover { filter: none; }
+.logo.react:hover { filter: none; }
+
+@keyframes logo-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Keep utility examples but make them no-op by default */
+.card { padding: 0; }
+.read-the-docs { color: inherit; }

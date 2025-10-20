@@ -1,0 +1,357 @@
+/* Global Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1a1d29;
+  font-family: 'Poppins', 'Segoe UI', Roboto, sans-serif;
+  color: #fff;
+}
+
+/* App shell */
+.app {
+  min-height: 100vh;
+  background-color: #1a1d29;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.header {
+  padding: 24px 28px;
+  border-bottom: none;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  width: 38px;
+  height: 38px;
+  background-color: #2563eb;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+}
+
+.logo-text {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 24px;
+}
+
+/* Login Card */
+.login-container {
+  width: 100%;
+  max-width: 420px;
+}
+
+/* App mark above title */
+.brand-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;           /* space above the H1 */
+}
+
+.brand-logo {
+  width: 200px;                   /* centered logo size */
+  height: 100px;
+  border-radius: 14px;           /* subtle rounding */
+  background: #2563eb;           /* fallback if image fails */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.brand-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;             /* fill nicely */
+}
+
+/* Welcome */
+.welcome-section {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.welcome-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+}
+
+.welcome-subtitle {
+  font-size: 18px;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+/* Form */
+.login-form {
+  margin-bottom: 36px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-input {
+  width: 100%;
+  padding: 18px;
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 17px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+}
+
+/* Form Options */
+.form-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+/* Checkbox */
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #4b5563;
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-input:checked + .checkbox-custom {
+  background-color: #2563eb;
+  border-color: #2563eb;
+}
+
+.checkbox-input:checked + .checkbox-custom::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0px;
+  width: 6px;
+  height: 10px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-label {
+  font-size: 15px;
+  color: #d1d5db;
+}
+
+/* Links and Buttons */
+.forgot-password {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.forgot-password:hover {
+  color: #3b82f6;
+}
+
+/* Login Button */
+.login-button {
+  width: 100%;
+  padding: 18px;
+  background-color: #2563eb;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+.login-button:hover { background-color: #1d4ed8; }
+.login-button:active {
+  background-color: #1e40af;
+  transform: scale(0.98);
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: 36px 0;
+}
+.divider::before,
+.divider::after {
+  content: '';
+  height: 1px;
+  flex: 1;
+  background-color: #374151;
+  opacity: 0.8;
+}
+.divider-text {
+  color: #9ca3af;
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+/* Social Buttons */
+.social-buttons {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 36px;
+}
+
+.social-button {
+  flex: 1;
+  padding: 14px 16px;
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  color: #d1d5db;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.social-button:hover {
+  background-color: #4b5563;
+  border-color: #6b7280;
+}
+
+.social-icon { flex-shrink: 0; }
+
+.google-button:hover {
+  background-color: #4285f4;
+  border-color: #4285f4;
+  color: #fff;
+}
+
+.facebook-button:hover {
+  background-color: #1877f2;
+  border-color: #1877f2;
+  color: #fff;
+}
+
+/* Signup Section */
+.signup-section { text-align: center; }
+
+.signup-text { color: #9ca3af; font-size: 15px; }
+
+.signup-link {
+  background: none;
+  border: none;
+  color: #2563eb;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.signup-link:hover { color: #3b82f6; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .main-content { padding: 20px 16px; }
+  .login-container { max-width: 768px; }
+  .welcome-title { font-size: 30px; }
+  .social-buttons { flex-direction: column; }
+  .social-button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .header { padding: 16px 20px; }
+  .welcome-title { font-size: 26px; }
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+}
+
+/* --- Enlarged dropdown arrow styling --- */
+.form-group select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 10px;
+  color: #fff;
+  padding: 18px 50px 18px 18px; /* more right padding for arrow space */
+  font-size: 17px;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' fill='%23ffffff'><polygon points='0,0 32,0 16,20'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 22px; /* 👈 control arrow size (increase/decrease here) */
+}
+
+/* Match focus & hover style with inputs */
+.form-group select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.25);
+}
+
+.form-group select:hover {
+  border-color: #6b7280;
+}

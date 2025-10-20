@@ -1,0 +1,141 @@
+/* Shell */
+.sidebar {
+  width: 280px;
+  background-color: #2a2a2a;
+  border-right: none;                      /* no hard line */
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  box-shadow: none;                        /* no shadow separator */
+}
+
+/* Header */
+.sidebar-header {
+  padding: 20px;
+  border-bottom: none;                     /* no bottom line */
+}
+
+/* App branding row */
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;                               /* space between icon and name */
+}
+
+
+.logo-icon {
+  width: 300px;
+  height: 76px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 10px;
+  background: transparent;
+}
+
+.logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+
+/* App name */
+.app-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  line-height: 1;                          /* align with 32px icon height */
+}
+
+/* Navigation */
+.sidebar-nav {
+  flex: 1;
+  padding: 20px 0;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  color: #b0b0b0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-size: 14px;
+  border: none;
+  outline: none;
+}
+
+.nav-item:hover {
+  background-color: #3a3a3a;
+  color: white;
+}
+
+.nav-item:focus-visible {
+  outline: 2px solid #4285f4;             /* accessible focus, not a border line */
+  outline-offset: -2px;
+}
+
+.nav-item.active {
+  background-color: #4285f4;
+  color: white;
+}
+
+.nav-item svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.sidebar-footer {
+  padding: 20px;
+  border-top: none;                        /* no top line */
+}
+
+/* Profile */
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.user-info { flex: 1; }
+
+.user-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: white;
+  margin-bottom: 2px;
+}
+
+.user-email {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+
+/* Settings button */
+.settings-btn {
+  background: none;
+  border: none;
+  color: #b0b0b0;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.settings-btn:hover {
+  background-color: #3a3a3a;
+  color: white;
+}
