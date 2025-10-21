@@ -145,23 +145,23 @@ export default function Register() {
               </select>
             </div>
 
-            <div className="form-options">
-              <label className="checkbox-container">
-                <input
-                  type="checkbox"
-                  checked={agreeTos}
-                  onChange={(e) => setAgreeTos(e.target.checked)}
-                  className="checkbox-input"
-                />
-                <span className="checkbox-custom"></span>
-                <span className="checkbox-label">
-                  I agree to the Terms of Service
-                </span>
-              </label>
-              <span style={{ visibility: 'hidden' }} className="forgot-password">
-                placeholder
+          <div className="form-options">
+            <label className="checkbox-container">
+              <input
+                type="checkbox"
+                checked={agreeTos}
+                onChange={(e) => setAgreeTos(e.target.checked)}
+                className="checkbox-input"
+              />
+              
+             <span className="checkbox-custom"></span>
+             <span className="checkbox-label"> I agree to the{' '}
+      
+              <Link to="/terms" className="link"> Terms of Service </Link>
               </span>
-            </div>
+             </label>
+            <span style={{ visibility: 'hidden' }} className="forgot-password"> placeholder </span>
+          </div>
 
             <button ref={submitBtnRef} type="submit" className="login-button">
               Sign up
