@@ -9,41 +9,59 @@ const router = Router();
 
 router.post('/register', async (req, res) => {
   try {
-    const { fullName, email, password, role } = req.body;
+    console.log('HIT /api/auth/register body:', req.body);
+    const { fullName, email, password, role, adminScope } = req.body;
+
     if (!fullName || !email || !password || !role) {
       return res.status(400).json({ message: 'Missing fields' });
     }
     if (!['admin', 'user'].includes(role)) {
       return res.status(400).json({ message: 'Invalid role' });
     }
-    const exists = await User.findOne({ email });
+    // Your schema requires adminScope when role === 'admin'
+    if (role === 'admin' && !adminScope) {
+      return res.status(400).json({ message: 'Admin department is required' });
+    }
+
+    const exists = await User.findOne({ email: email.toLowerCase().trim() });
     if (exists) return res.status(409).json({ message: 'Email already registered' });
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const user = await User.create({ fullName, email, passwordHash, role });
 
+    const user = await User.create({
+      fullName: fullName.trim(),
+      email: email.toLowerCase().trim(),
+      passwordHash,
+      role,
+      ...(role === 'admin' ? { adminScope } : {})
+    });
+
+    // Ensure JWT secret is set or this will throw
     const token = signAccessToken(user);
     setAuthCookie(res, token);
 
     return res.status(201).json({
-      user: { id: user._id, fullName: user.fullName, email: user.email, role: user.role },
+      user: { id: user._id, fullName: user.fullName, email: user.email, role: user.role, adminScope: user.adminScope },
       accessToken: token
     });
   } catch (e) {
-    return res.status(500).json({ message: 'Server error' });
+    console.error('Register error:', e);
+    // Surface validation messages to help debugging
+    const msg = e?.errors
+      ? Object.values(e.errors).map(x => x.message).join(', ')
+      : e?.message || 'Server error';
+    return res.status(500).json({ message: msg });
   }
 });
 
 router.post('/login', async (req, res) => {
   try {
     const { username, email, password, role } = req.body;
-    const identifier = email || username;
+    const identifier = (email || username || '').toLowerCase().trim();
     if (!identifier || !password || !role) {
       return res.status(400).json({ message: 'Missing fields' });
     }
-    const user = await User.findOne({
-      $or: [{ email: identifier.toLowerCase() }]
-    });
+    const user = await User.findOne({ email: identifier });
     if (!user) return res.status(401).json({ message: 'Invalid credentials' });
 
     const ok = await bcrypt.compare(password, user.passwordHash);
@@ -54,10 +72,11 @@ router.post('/login', async (req, res) => {
     setAuthCookie(res, token);
 
     return res.json({
-      user: { id: user._id, fullName: user.fullName, email: user.email, role: user.role },
+      user: { id: user._id, fullName: user.fullName, email: user.email, role: user.role, adminScope: user.adminScope },
       accessToken: token
     });
-  } catch {
+  } catch (e) {
+    console.error('Login error:', e);
     return res.status(500).json({ message: 'Server error' });
   }
 });
