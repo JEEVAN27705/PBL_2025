@@ -1,0 +1,150 @@
+/* Page container */
+.doc-archive-page {
+  padding: 28px 36px 0;
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* Larger, bold title with accent underline and extra spacing below */
+.doc-archive-title {
+  font-size: 34px;                    /* bigger title */
+  color: #e5e7eb;
+  font-weight: 800;                   /* strong bold */
+  margin: 0 0 22px;                   /* space before toolbar */
+  letter-spacing: 0.2px;
+  position: relative;
+}
+
+/*
+.doc-archive-title::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -8px;
+  width: 56px;
+  height: 2px;
+  background: #3a62ff;
+  border-radius: 2px;
+  opacity: .9;
+}
+*/
+
+/* Full-width container with no border/background */
+.doc-archive-card {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-sizing: border-box;
+  padding: 0;
+  max-width: none;
+  margin: 0;
+}
+
+/* Toolbar */
+.doc-archive-toolbar {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 30px;   /* was 14px */
+}
+
+
+.doc-search,
+.doc-filter,
+.doc-sort {
+  background: #0f1626;
+  color: #e5e7eb;
+  border: 1px solid #2f3c4f;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color .15s, box-shadow .15s, background .15s;
+}
+.doc-search { padding: 12px 18px; flex: 1; }
+.doc-filter, .doc-sort { padding: 12px 16px; min-width: 160px; }
+
+.doc-search:focus,
+.doc-filter:focus,
+.doc-sort:focus {
+  outline: none;
+  border-color: #3a62ff;
+  box-shadow: 0 0 0 2px rgba(58,98,255,.25);
+}
+
+/* Table */
+.doc-archive-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 16px;
+  color: #cfd6e4;
+}
+
+/* Header with rounded extremes, professional contrast */
+.doc-archive-table thead th {
+  background: linear-gradient(180deg, #243251, #1f2a3f);
+  color: #e8eefb;
+  padding: 12px 14px;
+  font-size: 14.5px;
+  letter-spacing: .6px;
+  font-weight: 700;
+  border-top: 1px solid #2a3856;
+  text-align: center;
+}
+.doc-archive-table thead th:first-child { border-top-left-radius: 8px; text-align: left; }
+.doc-archive-table thead th:last-child  { border-top-right-radius: 8px; }
+
+/* Row cells with extra vertical space (makes rows breathe) */
+.doc-archive-table tbody td {
+  padding: 18px 14px;                 /* more vertical space */
+  border-top: 1px solid #1d2840;
+  background: transparent;
+  font-size: 15px;
+}
+
+/* Alignment: left for long titles, center for others */
+.doc-title-cell { text-align: left; }
+.doc-center { text-align: center; }
+
+/* Soft zebra + hover */
+.doc-archive-table tbody tr:nth-child(odd) { background: rgba(19, 26, 38, 0.35); }
+.doc-archive-table tbody tr:hover { background: #162238; }
+
+/* Column widths to keep balance on wide screens */
+.doc-archive-table thead th:nth-child(1),
+.doc-archive-table tbody td:nth-child(1) { width: 52%; }
+.doc-archive-table thead th:nth-child(2),
+.doc-archive-table tbody td:nth-child(2) { width: 16%; }
+.doc-archive-table thead th:nth-child(3),
+.doc-archive-table tbody td:nth-child(3) { width: 20%; }
+.doc-archive-table thead th:nth-child(4),
+.doc-archive-table tbody td:nth-child(4) { width: 12%; }
+
+/* Action buttons: consistent, interactive, with danger style */
+.doc-action-btn {
+  background: none;
+  border: none;
+  color: #9fb0c9;
+  margin: 0 6px;
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  transition: background .12s, color .12s, transform .06s;
+}
+.doc-action-btn:hover  { background: #1a2a47; color: #5c86ff; }
+.doc-action-btn:active { transform: translateY(1px); }
+.doc-action-btn.danger:hover { background: #2a1a1a; color: #ff6b6b; }
+
+/* Responsive tweaks */
+@media (max-width: 900px) {
+  .doc-archive-toolbar { flex-wrap: wrap; gap: 12px; }
+  .doc-filter, .doc-sort { flex: 1 1 220px; min-width: 0; }
+}
+
+@media (min-width: 1800px) {
+  .doc-archive-table { font-size: 17px; }
+  .doc-archive-title { font-size: 36px; }
+}

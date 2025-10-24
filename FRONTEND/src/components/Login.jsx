@@ -23,23 +23,14 @@ export default function Login() {
     if (!username.trim()) { usernameRef.current?.focus(); return; }
     if (!password) { passwordRef.current?.focus(); return; }
     if (!role) { alert('Please select a role'); return; }
-
     try {
       setLoading(true);
       const data = await loginRequest({ username, password, role });
       localStorage.setItem('accessToken', data.accessToken);
-      if (rememberMe) localStorage.setItem('remember', '1'); else localStorage.removeItem('remember');
-
-      // Show success popup
-      alert('Login successful!');
-
-      // Navigate based on role
-      if (data.user.role === 'admin') navigate('/admin');
-      else navigate('/user');
-
+      if (rememberMe) localStorage.setItem('remember','1'); else localStorage.removeItem('remember');
+      if (data.user.role === 'admin') navigate('/admin', { replace: true });
+      else navigate('/user', { replace: true });
     } catch (err) {
-      // Show error popup
-      alert(`Login failed: ${err.message}`);
       setError(err.message);
     } finally {
       setLoading(false);
@@ -49,99 +40,46 @@ export default function Login() {
   const onUsernameKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); passwordRef.current?.focus(); } };
   const onPasswordKeyDown = (e) => { if (e.key === 'Enter') { submitBtnRef.current?.click(); } };
 
-  const handleGoogleLogin = () => console.log('Google login clicked');
-  const handleFacebookLogin = () => console.log('Facebook login clicked');
-  const handleForgotPassword = () => console.log('Forgot password clicked');
-
   return (
     <div className="app">
       <main className="main-content">
         <div className="login-container">
-          <div className="brand-mark">
-            <div className="brand-logo">
-              <img src={logo} alt="App logo" />
-            </div>
-          </div>
-
+          <div className="brand-mark"><div className="brand-logo"><img src={logo} alt="App logo" /></div></div>
           <div className="welcome-section">
             <h1 className="welcome-title">Welcome back</h1>
             <p className="welcome-subtitle">Sign in to continue your conversations.</p>
           </div>
-
           {error && <p style={{ color: 'red', marginBottom: 8 }}>{error}</p>}
-
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
-              <input
-                ref={usernameRef}
-                type="text"
-                placeholder="Username or Email"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                onKeyDown={onUsernameKeyDown}
-                className="form-input"
-                autoComplete="username"
-                autoFocus
-              />
+              <input ref={usernameRef} type="text" placeholder="Username or Email"
+                value={username} onChange={(e)=>setUsername(e.target.value)}
+                onKeyDown={onUsernameKeyDown} className="form-input" autoComplete="username" autoFocus />
             </div>
-
             <div className="form-group">
-              <input
-                ref={passwordRef}
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyDown={onPasswordKeyDown}
-                className="form-input"
-                autoComplete="current-password"
-              />
+              <input ref={passwordRef} type="password" placeholder="Password"
+                value={password} onChange={(e)=>setPassword(e.target.value)}
+                onKeyDown={onPasswordKeyDown} className="form-input" autoComplete="current-password" />
             </div>
-
             <div className="form-group">
-              <select
-                name="role"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-                className="form-input"
-                aria-label="Select role"
-              >
+              <select name="role" value={role} onChange={(e)=>setRole(e.target.value)} className="form-input" aria-label="Select role">
                 <option value="" disabled>Select role</option>
                 <option value="admin">Admin</option>
                 <option value="user">User</option>
               </select>
             </div>
-
             <div className="form-options">
               <label className="checkbox-container">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="checkbox-input"
-                />
+                <input type="checkbox" checked={rememberMe} onChange={(e)=>setRememberMe(e.target.checked)} className="checkbox-input" />
                 <span className="checkbox-custom"></span>
                 <span className="checkbox-label">Remember me</span>
               </label>
-              <button type="button" className="forgot-password" onClick={handleForgotPassword}>
-                Forgot Password?
-              </button>
             </div>
-
             <button ref={submitBtnRef} type="submit" className="login-button" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
-
-          <div className="divider">
-            <span className="divider-text">Or continue with</span>
-          </div>
-
-          <div className="social-buttons">
-            <button className="social-button google-button" onClick={handleGoogleLogin}>Google</button>
-            <button className="social-button facebook-button" onClick={handleFacebookLogin}>Facebook</button>
-          </div>
-
+          <div className="divider"><span className="divider-text">Or continue with</span></div>
           <div className="signup-section">
             <span className="signup-text">Don't have an account? </span>
             <Link className="signup-link" to="/register">Sign up</Link>

@@ -1,0 +1,173 @@
+/* Root layout + Times New Roman everywhere */
+.admin-shell { 
+  position: relative; 
+  display: grid; 
+  grid-template-columns: 240px 1fr; 
+  height: 100vh; 
+  background: #0b1220; 
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* Sidebar */
+.admin-nav { 
+  background: #0f172a; 
+  border-right: 1px solid #1f2937; 
+  padding: 18px 14px;          /* slightly larger padding */
+  display: flex; 
+  flex-direction: column; 
+  gap: 10px;                   /* spacing between items */
+  font-family: inherit;
+}
+
+/* Centered title with spacing below */
+.admin-brand { 
+  color: #e5e7eb; 
+  font-weight: 800; 
+  font-size: 28px; 
+  letter-spacing: 0.2px;
+  text-align: center;
+  margin: 4px 0 18px;          /* space between title and the list */
+}
+
+/* Navigation item: icon + label, spacing between words */
+.admin-link { 
+  display: flex;
+  align-items: center;
+  gap: 14px;                   /* space between icon and text */
+  color: #cbd5e1; 
+  text-decoration: none; 
+  padding: 12px 14px; 
+  border-radius: 0;            /* default sharp; active will curve */
+  font-size: 16px;
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+  word-spacing: 1px;           /* extra space between words */
+  transition: background 120ms ease, color 120ms ease;
+  margin: 0 2px;               /* slight insets left/right */
+}
+
+/* Hover */
+.admin-link:hover { 
+  background: #111827; 
+}
+
+/* Active: blue pill with a slight curve */
+.admin-link.active {
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 8px;          /* small curve for the blue box */
+}
+
+/* Keep label readable inside blue */
+.admin-link.active .nav-text { color: #ffffff; }
+
+/* Icon/image sizes */
+.nav-icon, .nav-image {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-icon { color: #cbd5e1; }               /* default icon color */
+.admin-link.active .nav-icon { color: #fff; }/* white inside blue */
+
+.nav-image { 
+  border-radius: 4px; 
+  object-fit: cover; 
+}
+
+/* Logout button */
+.logout { 
+  margin-top: auto; 
+  background: none; 
+  border: 1px solid #374151; 
+  color: #cbd5e1; 
+  padding: 10px 12px; 
+  border-radius: 6px; 
+  font-family: inherit;
+}
+
+/* Main content area */
+.admin-main { 
+  padding: 24px; 
+  overflow: auto; 
+  font-family: inherit;
+}
+
+/* Optional avatar spot if you add it later */
+.admin-avatar { 
+  position: absolute; 
+  top: 10px; 
+  right: 16px; 
+  color: #cbd5e1; 
+  font-family: inherit;
+}
+
+/* Form/content cards (if used elsewhere) */
+.card { 
+  background: #0f172a; 
+  border: 1px solid #1f2937; 
+  border-radius: 8px; 
+  padding: 20px; 
+  max-width: 900px; 
+  font-family: inherit;
+}
+
+.title { 
+  color: #e5e7eb; 
+  margin: 0 0 16px; 
+  font-family: inherit;
+}
+
+.form-grid { 
+  display: grid; 
+  gap: 14px; 
+}
+
+label { 
+  color: #cbd5e1; 
+  display: grid; 
+  gap: 6px; 
+  font-family: inherit;
+}
+
+input, select { 
+  background: #111827; 
+  color: #e5e7eb; 
+  border: 1px solid #374151; 
+  border-radius: 8px; 
+  padding: 10px 12px; 
+  font-family: inherit;
+}
+
+.dropzone { 
+  height: 120px; 
+  border: 2px dashed #374151; 
+  border-radius: 8px; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  color: #9aa4b2; 
+  background: #0b1220; 
+  font-family: inherit;
+}
+
+.link { color: #60a5fa; }
+
+.actions { 
+  display: flex; 
+  gap: 10px; 
+  justify-content: flex-end; 
+  margin-top: 14px; 
+}
+
+.btn { 
+  border-radius: 8px; 
+  padding: 10px 14px; 
+  font-family: inherit;
+}
+
+.btn.primary { background: #2563eb; color: #fff; border: none; }
+.btn.ghost   { background: none; color: #cbd5e1; border: 1px solid #374151; }
