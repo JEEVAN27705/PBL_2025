@@ -3,21 +3,30 @@ import { Outlet, NavLink } from 'react-router-dom';
 import './admin.css';
 
 // Feather icons
-import { FiHome, FiUpload, FiFolder, FiArchive, FiSettings } from 'react-icons/fi';
+import { FiHome, FiUpload, FiFolder, FiArchive, FiSettings, FiEye } from 'react-icons/fi';
 
 export default function AdminLayout() {
   return (
     <div className="admin-shell">
       <aside className="admin-nav">
-      <div className="admin-brand"
-        style={{ cursor: 'pointer' }}
-        title="Refresh"
-        onClick={() => window.location.reload()}> Admin Panel
-      </div>
+        <div
+          className="admin-brand"
+          style={{ cursor: 'pointer' }}
+          title="Refresh"
+          onClick={() => window.location.reload()}
+        >
+          Admin Panel
+        </div>
 
         <NavLink to="" end className="admin-link">
           <FiHome className="nav-icon" />
           <span className="nav-text">Home</span>
+        </NavLink>
+
+  {/* Correct /admin/view route with eye icon */}
+        <NavLink to="view" className="admin-link">
+          <FiEye className="nav-icon" />
+          <span className="nav-text">View Status</span>
         </NavLink>
 
         <NavLink to="upload" className="admin-link">

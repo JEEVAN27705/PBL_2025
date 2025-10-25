@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 
 import Login from './components/Login.jsx';
 import Register from './components/Register.jsx';
-import Terms from './components/Terms.jsx'; // ✅ fixed import name
+import Terms from './components/Terms.jsx';
 
 import ProtectedRoute from './ProtectedRoute.jsx';
 
@@ -22,7 +22,7 @@ export default function App() {
       <Route path="/" element={<Login />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path="/terms" element={<Terms />} /> {/* ✅ Fixed route */}
+      <Route path="/terms" element={<Terms />} />
 
       {/* Protected Routes for both user and admin */}
       <Route element={<ProtectedRoute allow={['user', 'admin']} />}>
@@ -53,10 +53,14 @@ export default function App() {
             path="settings"
             element={<div style={{ color: '#e5e7eb', padding: 24 }}>Settings</div>}
           />
+          <Route
+            path="view"
+            element={<div style={{ color: '#e5e7eb', padding: 24 }}>View Status</div>}
+          />
         </Route>
       </Route>
 
-      {/* Catch-all route */}
+      {/* Catch-all */}
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

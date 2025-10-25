@@ -27,8 +27,16 @@ export default function UploadPage() {
   const [uploading, setUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const MAX_SIZE_MB = 20;
+
+  useEffect(() => {
+    try {
+      const userStr = localStorage.getItem('user');
+      if (userStr) setCurrentUser(JSON.parse(userStr));
+    } catch {}
+  }, []);
 
   useEffect(() => {
     setSelectedFiles(prev => {
@@ -60,13 +68,10 @@ export default function UploadPage() {
     return { valid, msgs };
   };
 
-  // ✅ Fixed: direct click, no timeout, no double dialog
   const handleBrowseClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
+    if (fileInputRef.current) fileInputRef.current.click();
   };
 
   const mergeFiles = (incoming) => {
@@ -87,7 +92,6 @@ export default function UploadPage() {
     setErrors(msgs);
     if (valid.length) mergeFiles(valid);
 
-    // reset so same file can be picked again
     input.value = '';
   };
 
@@ -119,16 +123,36 @@ export default function UploadPage() {
     if (!verifyDept) { alert('Please select a department to verify'); return; }
     if (!selectedFiles.length) { alert('Please select at least one PDF to upload'); return; }
 
+    // Re-read user just before submit
+    let user = currentUser;
+    if (!user) {
+      try {
+        const str = localStorage.getItem('user');
+        if (str) user = JSON.parse(str);
+      } catch {}
+    }
+    if (!user) {
+      alert('User not logged in. Please log in first.');
+      return;
+    }
+
     const url = `${API_BASE.replace(/\/+$/, '')}/api/upload`;
     const formData = new FormData();
     for (const f of selectedFiles) formData.append('files', f);
     formData.append('title', title.trim());
     formData.append('type', docType || 'pdf');
     formData.append('verifyDept', verifyDept);
+    formData.append('uploadedBy', user.email || user.username);
+    formData.append('userId', user._id || user.id);
+    formData.append('userRole', user.role || 'user');
 
     try {
       setUploading(true);
-      const res = await fetch(url, { method: 'POST', body: formData });
+      const res = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        credentials: 'include' // send cookies if backend uses them
+      });
       const text = await res.text();
       let data = null;
       try { data = JSON.parse(text); } catch {}
