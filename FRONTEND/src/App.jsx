@@ -14,6 +14,7 @@ import AdminLayout from './panels/admin/AdminLayout.jsx';
 import UploadPage from './panels/admin/UploadPage.jsx';
 import DocumentArchive from './panels/admin/DocumentArchive.jsx';
 import PendingApprovals from './panels/admin/PendingApprovals.jsx';
+import ViewStatus from './panels/admin/ViewStatus.jsx';
 
 export default function App() {
   return (
@@ -49,14 +50,8 @@ export default function App() {
           <Route path="upload" element={<UploadPage />} />
           <Route path="pending" element={<PendingApprovals />} />
           <Route path="archive" element={<DocumentArchive />} />
-          <Route
-            path="settings"
-            element={<div style={{ color: '#e5e7eb', padding: 24 }}>Settings</div>}
-          />
-          <Route
-            path="view"
-            element={<div style={{ color: '#e5e7eb', padding: 24 }}>View Status</div>}
-          />
+          <Route path="settings" element={<div style={{ color: '#e5e7eb', padding: 24 }}>Settings</div>} />
+          <Route path="view" element={<ViewStatus />} />
         </Route>
       </Route>
 
