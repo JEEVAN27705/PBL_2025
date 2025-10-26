@@ -31,11 +31,33 @@ export default function UploadPage() {
 
   const MAX_SIZE_MB = 20;
 
+  // Load user cached by Login
   useEffect(() => {
     try {
       const userStr = localStorage.getItem('user');
       if (userStr) setCurrentUser(JSON.parse(userStr));
     } catch {}
+  }, []);
+
+  // Optionally refresh user from /api/me (keeps local user fresh)
+  useEffect(() => {
+    const fetchMe = async () => {
+      try {
+        const url = `${API_BASE.replace(/\/+$/, '')}/api/me`;
+        const token = localStorage.getItem('accessToken') || '';
+        const res = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+          headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
+        if (res.ok) {
+          const me = await res.json();
+          setCurrentUser(me);
+          try { localStorage.setItem('user', JSON.stringify(me)); } catch {}
+        }
+      } catch {}
+    };
+    fetchMe();
   }, []);
 
   useEffect(() => {
@@ -71,7 +93,7 @@ export default function UploadPage() {
   const handleBrowseClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    if (fileInputRef.current) fileInputRef.current.click();
+    fileInputRef.current?.click();
   };
 
   const mergeFiles = (incoming) => {
@@ -109,7 +131,7 @@ export default function UploadPage() {
     const { valid, msgs } = validateFiles(filesArr);
     setErrors(msgs);
     if (valid.length) mergeFiles(valid);
-    if (dropzoneRef.current) dropzoneRef.current.blur();
+    dropzoneRef.current?.blur();
   }, [selectedFiles]);
 
   const visibleFiles = selectedFiles.filter(f => !f[HIDDEN_DEFAULT_FLAG]);
@@ -121,41 +143,41 @@ export default function UploadPage() {
   const handleSubmit = async () => {
     if (!title.trim()) { alert('Please enter a document title'); return; }
     if (!verifyDept) { alert('Please select a department to verify'); return; }
-    if (!selectedFiles.length) { alert('Please select at least one PDF to upload'); return; }
+    if (visibleFiles.length === 0) { alert('Please select at least one PDF to upload'); return; }
 
-    // Re-read user just before submit
-    let user = currentUser;
-    if (!user) {
-      try {
-        const str = localStorage.getItem('user');
-        if (str) user = JSON.parse(str);
-      } catch {}
-    }
-    if (!user) {
-      alert('User not logged in. Please log in first.');
-      return;
-    }
+    const token = localStorage.getItem('accessToken') || '';
+    if (!token) { alert('Not authenticated. Please log in again.'); return; }
 
     const url = `${API_BASE.replace(/\/+$/, '')}/api/upload`;
     const formData = new FormData();
-    for (const f of selectedFiles) formData.append('files', f);
+
+    for (const f of visibleFiles) formData.append('files', f);
     formData.append('title', title.trim());
     formData.append('type', docType || 'pdf');
     formData.append('verifyDept', verifyDept);
-    formData.append('uploadedBy', user.email || user.username);
-    formData.append('userId', user._id || user.id);
-    formData.append('userRole', user.role || 'user');
+
+    // IMPORTANT: Add the fields your backend requires
+    const u = currentUser || {};
+    const uploadedBy = u.email || u.username || '';
+    const userId = u._id || u.id || '';
+    const userRole = u.role || 'user';
+    formData.append('uploadedBy', uploadedBy);
+    formData.append('userId', userId);
+    formData.append('userRole', userRole);
 
     try {
       setUploading(true);
       const res = await fetch(url, {
         method: 'POST',
         body: formData,
-        credentials: 'include' // send cookies if backend uses them
+        credentials: 'include',
+        headers: token ? { Authorization: `Bearer ${token}` } : {}
       });
+
       const text = await res.text();
       let data = null;
       try { data = JSON.parse(text); } catch {}
+
       if (!res.ok) throw new Error(data?.message || text || `Upload failed (${res.status})`);
 
       alert('Files uploaded successfully!');

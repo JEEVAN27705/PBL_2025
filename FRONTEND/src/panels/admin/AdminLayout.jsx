@@ -23,15 +23,15 @@ export default function AdminLayout() {
           <span className="nav-text">Home</span>
         </NavLink>
 
+        <NavLink to="upload" className="admin-link">
+          <FiUpload className="nav-icon" />
+          <span className="nav-text">Upload Documents</span>
+        </NavLink>
+
   {/* Correct /admin/view route with eye icon */}
         <NavLink to="view" className="admin-link">
           <FiEye className="nav-icon" />
           <span className="nav-text">View Status</span>
-        </NavLink>
-
-        <NavLink to="upload" className="admin-link">
-          <FiUpload className="nav-icon" />
-          <span className="nav-text">Upload Documents</span>
         </NavLink>
 
         <NavLink to="pending" className="admin-link">

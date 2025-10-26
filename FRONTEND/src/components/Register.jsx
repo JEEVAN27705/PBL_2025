@@ -10,7 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [agreeTos, setAgreeTos] = useState(false);
   const [role, setRole]         = useState('');
-  const [adminScope, setAdminScope] = useState(''); // Department for admin only
+  const [adminScope, setAdminScope] = useState('');
 
   const [error, setError]       = useState('');
   const [loading, setLoading]   = useState(false);
@@ -31,7 +31,6 @@ export default function Register() {
     if (!password)        { passwordRef.current?.focus(); return; }
     if (!role)            { alert('Select a role');        return; }
 
-    // Require department (adminScope) only when role is admin
     if (role === 'admin' && !adminScope) {
       alert('Select Department');
       return;
@@ -42,15 +41,22 @@ export default function Register() {
     try {
       setLoading(true);
       const payload = { fullName, email, password, role };
-      if (role === 'admin') payload.adminScope = adminScope; // send department
+      if (role === 'admin') payload.adminScope = adminScope;
 
       const data = await registerRequest(payload);
 
-      // Store token if provided; some backends use cookies only
+      // Persist token if present
       const token = data?.accessToken || data?.token || null;
       if (token) localStorage.setItem('accessToken', token);
 
-      // Prefer server role if available, else fall back to chosen role
+      // NEW: Persist the authenticated user object for later use
+      if (data?.user) {
+        try {
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } catch {}
+      }
+
+      // Prefer server role if present
       const nextRole = data?.user?.role || role;
       if (nextRole === 'admin') navigate('/admin', { replace: true });
       else navigate('/user', { replace: true });
@@ -122,7 +128,6 @@ export default function Register() {
               />
             </div>
 
-            {/* Role select */}
             <div className="form-group">
               <select
                 name="role"
@@ -137,7 +142,6 @@ export default function Register() {
               </select>
             </div>
 
-            {/* Department (admin only) */}
             {role === 'admin' && (
               <div className="form-group">
                 <select
