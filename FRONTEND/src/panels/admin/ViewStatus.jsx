@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import './view-status.css';
 
+// Emoji icons
 const Eye = ({ title = 'View' }) => <span title={title} role="img" aria-label="view">👁️</span>;
 const Download = ({ title = 'Download' }) => <span title={title} role="img" aria-label="download">⬇️</span>;
 const Trash = ({ title = 'Delete' }) => <span title={title} role="img" aria-label="delete">🗑️</span>;
@@ -20,11 +21,21 @@ const SORT_OPTIONS = [
 export default function ViewStatus() {
   const [docs, setDocs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [q, setQ] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [status, setStatus] = useState('All');
   const [sortKey, setSortKey] = useState('date_desc');
   const [error, setError] = useState('');
 
+  // Debounce search input (only apply after user pauses typing)
+  useEffect(() => {
+    const id = setTimeout(() => {
+      setDebouncedSearch(searchTerm.trim().toLowerCase());
+    }, 250);
+    return () => clearTimeout(id);
+  }, [searchTerm]);
+
+  // Fetch data
   useEffect(() => {
     let cancelled = false;
     (async () => {
@@ -51,12 +62,13 @@ export default function ViewStatus() {
     return () => { cancelled = true; };
   }, []);
 
+  // Filter + sort
   const filtered = useMemo(() => {
-    const norm = (s) => String(s || '').toLowerCase();
+    const norm = (v) => String(v || '').toLowerCase();
     let list = docs.slice();
 
-    if (q.trim()) {
-      const k = norm(q);
+    if (debouncedSearch) {
+      const k = debouncedSearch;
       list = list.filter(d =>
         norm(d.title).includes(k) ||
         norm(d.type).includes(k) ||
@@ -68,7 +80,7 @@ export default function ViewStatus() {
 
     if (status !== 'All') {
       list = list.filter(d => {
-        const s = String(d.status || '').toLowerCase();
+        const s = norm(d.status);
         return (status === 'Verified' && s === 'verified')
             || (status === 'Pending'  && s === 'pending')
             || (status === 'Rejected' && s === 'rejected');
@@ -89,22 +101,22 @@ export default function ViewStatus() {
         );
         break;
       case 'title_asc':
-        list.sort((a, b) => String(a.title).localeCompare(String(b.title)));
+        list.sort((a, b) => String(a.title || '').localeCompare(String(b.title || '')));
         break;
       case 'title_desc':
-        list.sort((a, b) => String(b.title).localeCompare(String(a.title)));
+        list.sort((a, b) => String(b.title || '').localeCompare(String(a.title || '')));
         break;
       default: break;
     }
     return list;
-  }, [docs, q, status, sortKey]);
+  }, [docs, debouncedSearch, status, sortKey]);
 
   const formatDate = (s) => {
     if (!s) return '-';
     const d = new Date(s);
     if (isNaN(d.getTime())) return '-';
     const yyyy = d.getFullYear();
-    const mm = String(d.getMonth()+1).padStart(2, '0');
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
   };
@@ -120,7 +132,7 @@ export default function ViewStatus() {
     const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` }
+      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` },
     });
     if (res.ok) setDocs(prev => prev.filter(x => x._id !== row._id));
     else alert('Delete failed');
@@ -130,38 +142,38 @@ export default function ViewStatus() {
     <div className="vs-page">
       <h1 className="vs-title">View Status</h1>
 
-      {/* First-image style toolbar: pill dropdowns with embedded labels */}
+      {/* Toolbar (first-image style) */}
       <div className="vs-toolbar vs-toolbar-first">
         <input
           className="vs-search vs-search-first"
           placeholder="Search documents..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          aria-label="Search documents"
         />
 
-        {/* Filter by Type style (shows label text inside the control) */}
         <div className="vs-pill-select" data-placeholder="Filter by Type">
           <select
             aria-label="Filter by Status"
             value={status}
-            onChange={(e)=>setStatus(e.target.value)}
+            onChange={(e) => setStatus(e.target.value)}
           >
             {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
         </div>
 
-        {/* Sort by Date style (shows label text inside the control) */}
         <div className="vs-pill-select" data-placeholder="Sort by Date">
           <select
             aria-label="Sort by"
             value={sortKey}
-            onChange={(e)=>setSortKey(e.target.value)}
+            onChange={(e) => setSortKey(e.target.value)}
           >
             {SORT_OPTIONS.map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
           </select>
         </div>
       </div>
 
+      {/* Table */}
       <div className="vs-card">
         <table className="vs-table">
           <thead>
@@ -185,9 +197,9 @@ export default function ViewStatus() {
                 <td className="vs-center"><StatusPill status={doc.status} /></td>
                 <td className="vs-center">{formatDate(doc.updatedAt || doc.approvedDate || doc.createdAt)}</td>
                 <td className="vs-center">
-                  <button className="vs-action-btn" onClick={()=>onView(doc)} aria-label="View"><Eye /></button>
-                  <button className="vs-action-btn" onClick={()=>onDownload(doc)} aria-label="Download"><Download /></button>
-                  <button className="vs-action-btn danger" onClick={()=>onDelete(doc)} aria-label="Delete"><Trash /></button>
+                  <button className="vs-action-btn" onClick={() => onView(doc)} aria-label="View"><Eye /></button>
+                  <button className="vs-action-btn" onClick={() => onDownload(doc)} aria-label="Download"><Download /></button>
+                  <button className="vs-action-btn danger" onClick={() => onDelete(doc)} aria-label="Delete"><Trash /></button>
                 </td>
               </tr>
             ))}

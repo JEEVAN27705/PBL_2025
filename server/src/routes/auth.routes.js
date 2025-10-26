@@ -1,3 +1,4 @@
+// server/src/routes/auth.routes.js
 import { Router } from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
@@ -18,7 +19,6 @@ router.post('/register', async (req, res) => {
     if (!['admin', 'user'].includes(role)) {
       return res.status(400).json({ message: 'Invalid role' });
     }
-    // Your schema requires adminScope when role === 'admin'
     if (role === 'admin' && !adminScope) {
       return res.status(400).json({ message: 'Admin department is required' });
     }
@@ -36,7 +36,6 @@ router.post('/register', async (req, res) => {
       ...(role === 'admin' ? { adminScope } : {})
     });
 
-    // Ensure JWT secret is set or this will throw
     const token = signAccessToken(user);
     setAuthCookie(res, token);
 
@@ -46,7 +45,6 @@ router.post('/register', async (req, res) => {
     });
   } catch (e) {
     console.error('Register error:', e);
-    // Surface validation messages to help debugging
     const msg = e?.errors
       ? Object.values(e.errors).map(x => x.message).join(', ')
       : e?.message || 'Server error';
@@ -86,8 +84,23 @@ router.post('/logout', (req, res) => {
   return res.json({ message: 'Logged out' });
 });
 
-router.get('/me', auth, (req, res) => {
-  return res.json({ user: req.user });
+router.get('/me', auth, async (req, res) => {
+  try {
+    const me = await User.findById(req.user.id).lean();
+    if (!me) return res.status(404).json({ message: 'User not found' });
+    return res.json({
+      user: {
+        id: String(me._id),
+        fullName: me.fullName,
+        email: me.email,
+        role: me.role,
+        adminScope: me.adminScope || null,
+        avatarUrl: me.avatarUrl || ''
+      }
+    });
+  } catch (e) {
+    return res.status(500).json({ message: 'Failed to load user' });
+  }
 });
 
 router.get('/admin/ping', auth, authorize(['admin']), (req, res) => {
