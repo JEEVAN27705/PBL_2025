@@ -1,3 +1,4 @@
+// server/src/app.js
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
@@ -9,6 +10,7 @@ import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.routes.js';
 import uploadRoutes from './routes/upload.js';
+import viewStatusRoutes from './routes/viewStatus.js'; // NEW
 
 // Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -46,14 +48,12 @@ export function createApp() {
   );
 
   // Static serving for uploaded files
-  app.use(
-    '/uploads',
-    express.static(path.join(__dirname, '../uploads'))
-  );
+  app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
   // Routes
   app.use('/api/auth', authRoutes);
   app.use('/api/upload', uploadRoutes);
+  app.use('/api', viewStatusRoutes); // NEW: exposes GET /api/admin/view-status
 
   // Health check
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));

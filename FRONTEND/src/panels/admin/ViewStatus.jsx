@@ -1,3 +1,4 @@
+// src/panels/admin/ViewStatus.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import './view-status.css';
 
@@ -33,10 +34,14 @@ export default function ViewStatus() {
       setLoading(true);
       setError('');
       try {
-        const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/admin/view-status`, {
-          credentials: 'include',
-          headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` }
-        });
+        const token = localStorage.getItem('accessToken') || '';
+        const res = await fetch(
+          `${API_BASE.replace(/\/+$/, '')}/api/admin/view-status?mine=true`,
+          {
+            credentials: 'include',
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+          }
+        );
         if (!res.ok) throw new Error(`Failed to load: ${res.status}`);
         const data = await res.json();
         if (!cancelled) setDocs(Array.isArray(data) ? data : []);
@@ -120,13 +125,18 @@ export default function ViewStatus() {
           onChange={(e) => setQ(e.target.value)}
         />
         <select className="vs-filter" value={status} onChange={(e)=>setStatus(e.target.value)}>
-          {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+          {['All', 'Verified', 'Pending', 'Rejected'].map(s => <option key={s} value={s}>{s}</option>)}
         </select>
         <select className="vs-type" value={type} onChange={(e)=>setType(e.target.value)}>
-          {TYPE_OPTIONS.map(t => <option key={t} value={t}>{t}</option>)}
+          {['All', 'Exam', 'Holidays', 'Circular', 'Notice', 'Other'].map(t => <option key={t} value={t}>{t}</option>)}
         </select>
         <select className="vs-sort" value={sortKey} onChange={(e)=>setSortKey(e.target.value)}>
-          {SORT_OPTIONS.map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
+          {[
+            { key: 'date_desc', label: 'Newest first' },
+            { key: 'date_asc', label: 'Oldest first' },
+            { key: 'title_asc', label: 'Title A–Z' },
+            { key: 'title_desc', label: 'Title Z–A' },
+          ].map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
         </select>
       </div>
 
@@ -142,15 +152,9 @@ export default function ViewStatus() {
             </tr>
           </thead>
           <tbody>
-            {loading && (
-              <tr><td className="vs-center" colSpan="5">Loading…</td></tr>
-            )}
-            {error && !loading && (
-              <tr><td className="vs-center" colSpan="5">{error}</td></tr>
-            )}
-            {!loading && !error && filtered.length === 0 && (
-              <tr><td className="vs-center" colSpan="5">No documents found.</td></tr>
-            )}
+            {loading && <tr><td className="vs-center" colSpan="5">Loading…</td></tr>}
+            {error && !loading && <tr><td className="vs-center" colSpan="5">{error}</td></tr>}
+            {!loading && !error && filtered.length === 0 && <tr><td className="vs-center" colSpan="5">No documents found.</td></tr>}
 
             {!loading && !error && filtered.map(doc => (
               <tr key={doc._id}>
