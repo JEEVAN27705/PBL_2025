@@ -8,60 +8,58 @@
   font-family: "Times New Roman", Times, serif;
 }
 
+
 /* Sidebar */
 .admin-nav { 
   background: #0f172a; 
   border-right: 1px solid #1f2937; 
-  padding: 18px 14px;          /* slightly larger padding */
+  padding: 18px 14px 14px; 
   display: flex; 
   flex-direction: column; 
-  gap: 10px;                   /* spacing between items */
+  gap: 8px;
   font-family: inherit;
 }
 
-/* Centered title with spacing below */
+
+/* Centered title */
 .admin-brand { 
   color: #e5e7eb; 
   font-weight: 800; 
   font-size: 28px; 
   letter-spacing: 0.2px;
   text-align: center;
-  margin: 4px 0 18px;          /* space between title and the list */
+  margin: 4px 0 18px;
 }
 
-/* Navigation item: icon + label, spacing between words */
+
+/* Navigation links */
 .admin-link { 
   display: flex;
   align-items: center;
-  gap: 14px;                   /* space between icon and text */
+  gap: 14px;
   color: #cbd5e1; 
   text-decoration: none; 
-  padding: 12px 14px; 
-  border-radius: 0;            /* default sharp; active will curve */
+  padding: 11px 12px;
+  border-radius: 8px;
   font-size: 16px;
-  line-height: 1.1;
-  letter-spacing: 0.2px;
-  word-spacing: 1px;           /* extra space between words */
   transition: background 120ms ease, color 120ms ease;
-  margin: 0 2px;               /* slight insets left/right */
+  margin: 0 2px;
 }
 
-/* Hover */
 .admin-link:hover { 
-  background: #111827; 
+  background: #101a2c; 
 }
 
-/* Active: blue pill with a slight curve */
 .admin-link.active {
-  background: #2563eb;
+  background: #2653c8;
   color: #ffffff;
-  border-radius: 8px;          /* small curve for the blue box */
+  border-radius: 10px;
 }
 
-/* Keep label readable inside blue */
 .admin-link.active .nav-text { color: #ffffff; }
 
-/* Icon/image sizes */
+
+/* Icons */
 .nav-icon, .nav-image {
   width: 22px;
   height: 22px;
@@ -70,104 +68,97 @@
   justify-content: center;
 }
 
-.nav-icon { color: #cbd5e1; }               /* default icon color */
-.admin-link.active .nav-icon { color: #fff; }/* white inside blue */
+.nav-icon { color: #cbd5e1; }
+.admin-link.active .nav-icon { color: #fff; }
 
-.nav-image { 
-  border-radius: 4px; 
-  object-fit: cover; 
-}
 
-/* Logout button */
-.logout { 
-  margin-top: auto; 
-  background: none; 
-  border: 1px solid #374151; 
-  color: #cbd5e1; 
-  padding: 10px 12px; 
-  border-radius: 6px; 
-  font-family: inherit;
-}
-
-/* Main content area */
+/* Main content */
 .admin-main { 
   padding: 24px; 
   overflow: auto; 
   font-family: inherit;
 }
 
-/* Optional avatar spot if you add it later */
-.admin-avatar { 
-  position: absolute; 
-  top: 10px; 
-  right: 16px; 
-  color: #cbd5e1; 
-  font-family: inherit;
+
+/* Profile (bottom section — clean version, no border) */
+.admin-profile {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 44px 1fr 22px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px;
+  border-radius: 10px;
+  background: none;          /* no gradient or background */
+  border: none;              /* no border */
+  outline: none;             /* no outline */
+  box-shadow: none;          /* no shadow */
+  text-align: left;
+  color: #e5e7eb;
+  transition: none;
+  position: relative;
+  cursor: default;
 }
 
-/* Form/content cards (if used elsewhere) */
-.card { 
-  background: #0f172a; 
-  border: 1px solid #1f2937; 
-  border-radius: 8px; 
-  padding: 20px; 
-  max-width: 900px; 
-  font-family: inherit;
+.admin-profile:hover {
+  background: none;
+  box-shadow: none;
 }
 
-.title { 
-  color: #e5e7eb; 
-  margin: 0 0 16px; 
-  font-family: inherit;
+/* Avatar */
+.profile-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: none;          /* no background tint */
+  box-shadow: none;          /* no inner/outer shadows */
+  border: none;              /* remove any border */
 }
 
-.form-grid { 
-  display: grid; 
-  gap: 14px; 
+/* Name text */
+.profile-text { min-width: 0; }
+
+.profile-name {
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .2px;
+  color: #eaf0fb;
+  line-height: 1.1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: none;
 }
 
-label { 
-  color: #cbd5e1; 
-  display: grid; 
-  gap: 6px; 
-  font-family: inherit;
+/* Logout icon only clickable */
+.profile-action {
+  width: 18px;
+  height: 18px;
+  color: #cfd6e4;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: color 0.2s ease;
 }
 
-input, select { 
-  background: #111827; 
-  color: #e5e7eb; 
-  border: 1px solid #374151; 
-  border-radius: 8px; 
-  padding: 10px 12px; 
-  font-family: inherit;
+.profile-action:hover {
+  color: #ffffff;
 }
 
-.dropzone { 
-  height: 120px; 
-  border: 2px dashed #374151; 
-  border-radius: 8px; 
-  display: flex; 
-  align-items: center; 
-  justify-content: center; 
-  color: #9aa4b2; 
-  background: #0b1220; 
-  font-family: inherit;
+.profile-action:active {
+  transform: scale(0.9);
 }
 
-.link { color: #60a5fa; }
-
-.actions { 
-  display: flex; 
-  gap: 10px; 
-  justify-content: flex-end; 
-  margin-top: 14px; 
+/* Small-screen */
+@media (max-width: 480px) {
+  .admin-profile {
+    grid-template-columns: 40px 1fr 20px;
+    padding: 8px 8px;
+  }
+  .profile-avatar { width: 40px; height: 40px; }
+  .profile-name { font-size: 16px; }
+  .profile-action { width: 16px; height: 16px; }
 }
-
-.btn { 
-  border-radius: 8px; 
-  padding: 10px 14px; 
-  font-family: inherit;
-}
-
-.btn.primary { background: #2563eb; color: #fff; border: none; }
-.btn.ghost   { background: none; color: #cbd5e1; border: 1px solid #374151; }

@@ -3,9 +3,20 @@ import { Outlet, NavLink } from 'react-router-dom';
 import './admin.css';
 
 // Feather icons
-import { FiHome, FiUpload, FiFolder, FiArchive, FiSettings, FiEye } from 'react-icons/fi';
+import { FiHome, FiUpload, FiFolder, FiArchive, FiSettings, FiEye, FiLogOut } from 'react-icons/fi';
 
 export default function AdminLayout() {
+  const user = {
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    avatar: 'https://i.pravatar.cc/100?img=5'
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    window.location.href = '/login';
+  };
+
   return (
     <div className="admin-shell">
       <aside className="admin-nav">
@@ -28,7 +39,6 @@ export default function AdminLayout() {
           <span className="nav-text">Upload Documents</span>
         </NavLink>
 
-  {/* Correct /admin/view route with eye icon */}
         <NavLink to="view" className="admin-link">
           <FiEye className="nav-icon" />
           <span className="nav-text">View Status</span>
@@ -49,7 +59,19 @@ export default function AdminLayout() {
           <span className="nav-text">Settings</span>
         </NavLink>
 
-        <button className="logout">Logout</button>
+        {/* Profile section — no border, no effect */}
+        <div className="admin-profile" title="User Profile">
+          <img className="profile-avatar" src={user.avatar} alt="avatar" />
+          <div className="profile-text">
+            <div className="profile-name">{user.name}</div>
+          </div>
+          <FiLogOut
+            className="profile-action"
+            aria-hidden="true"
+            title="Logout"
+            onClick={handleLogout}
+          />
+        </div>
       </aside>
 
       <main className="admin-main">
