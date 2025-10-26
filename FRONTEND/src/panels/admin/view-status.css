@@ -14,7 +14,7 @@
   position: relative;
 }
 
-/* Card wrapper (transparent like archive) */
+/* Card wrapper */
 .vs-card {
   background: transparent;
   border: none;
@@ -25,32 +25,85 @@
   margin: 0;
 }
 
-/* Toolbar */
-.vs-toolbar {
-  display: flex;
-  gap: 18px;
-  margin-bottom: 30px;
+/* First-image style toolbar */
+.vs-toolbar-first {
+  display: grid;
+  grid-template-columns: 1fr max-content max-content;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 26px;
 }
 
-.vs-search,
-.vs-filter,
-.vs-type,
-.vs-sort {
+/* Search input (left) */
+.vs-search-first {
   background: #0f1626;
   color: #e5e7eb;
   border: 1px solid #2f3c4f;
-  border-radius: 8px;
+  border-radius: 10px;
+  height: 48px;
+  padding: 12px 16px;
   font-size: 16px;
   transition: border-color .15s, box-shadow .15s, background .15s;
 }
-.vs-search { padding: 12px 18px; flex: 1; }
-.vs-filter, .vs-type, .vs-sort { padding: 12px 16px; min-width: 160px; }
-
-.vs-search:focus,
-.vs-filter:focus,
-.vs-type:focus,
-.vs-sort:focus {
+.vs-search-first:focus {
   outline: none;
+  border-color: #3a62ff;
+  box-shadow: 0 0 0 2px rgba(58,98,255,.25);
+}
+.vs-search-first:hover { background: #111b2d; }
+
+/* Pill select that shows a placeholder label inside (like “Filter by Type”)*/
+.vs-pill-select {
+  position: relative;
+  min-width: 210px;
+  height: 48px;
+  border-radius: 10px;
+  border: 1px solid #2f3c4f;
+  background: #0f1626;
+  display: grid;
+  align-items: center;
+  padding: 0 42px 0 14px; /* caret spacing */
+  color: #e5e7eb;
+}
+
+/* Placeholder text shown when select isn't focused/opened */
+.vs-pill-select::before {
+  content: attr(data-placeholder);
+  color: #cfd6e4;
+  opacity: 0.9;
+  font-size: 16px;
+  pointer-events: none;
+}
+
+/* Native select covers but is fully transparent, so only caret and border visible, matching first image */
+.vs-pill-select select {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;            /* hide native text to keep placeholder style */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+
+/* Custom caret */
+.vs-pill-select::after {
+  content: "";
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-40%);
+  width: 0; height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 7px solid #cfd6e4;
+  pointer-events: none;
+}
+
+/* Focus ring when user opens/targets the select */
+.vs-pill-select:has(select:focus) {
   border-color: #3a62ff;
   box-shadow: 0 0 0 2px rgba(58,98,255,.25);
 }
@@ -80,12 +133,11 @@
 
 /* Body rows */
 .vs-table tbody td {
-  padding: 18px 14px;
+  padding: 16px 14px;
   border-top: 1px solid #1d2840;
   background: transparent;
   font-size: 15px;
 }
-
 .vs-title-cell { text-align: left; }
 .vs-center { text-align: center; }
 
@@ -93,17 +145,17 @@
 .vs-table tbody tr:nth-child(odd) { background: rgba(19, 26, 38, 0.35); }
 .vs-table tbody tr:hover { background: #162238; }
 
-/* Column widths to mirror archive + status column */
+/* Column widths */
 .vs-table thead th:nth-child(1),
-.vs-table tbody td:nth-child(1) { width: 40%; }  /* Document Title */
+.vs-table tbody td:nth-child(1) { width: 40%; }
 .vs-table thead th:nth-child(2),
-.vs-table tbody td:nth-child(2) { width: 14%; }  /* Type */
+.vs-table tbody td:nth-child(2) { width: 14%; }
 .vs-table thead th:nth-child(3),
-.vs-table tbody td:nth-child(3) { width: 16%; }  /* Status */
+.vs-table tbody td:nth-child(3) { width: 16%; }
 .vs-table thead th:nth-child(4),
-.vs-table tbody td:nth-child(4) { width: 18%; }  /* Updated/Approved Date */
+.vs-table tbody td:nth-child(4) { width: 18%; }
 .vs-table thead th:nth-child(5),
-.vs-table tbody td:nth-child(5) { width: 12%; }  /* Actions */
+.vs-table tbody td:nth-child(5) { width: 12%; }
 
 /* Status pills */
 .vs-pill {
@@ -151,27 +203,13 @@
 .vs-action-btn:active { transform: translateY(1px); }
 .vs-action-btn.danger:hover { background: #2a1a1a; color: #ff6b6b; }
 
-/* Status legend row (optional helper) */
-.vs-legend {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin: -10px 0 18px;
-  color: #9fb0c9;
-  font-size: 13px;
-}
-.vs-legend .dot {
-  width: 10px; height: 10px; border-radius: 50%;
-  display: inline-block; margin-right: 6px;
-}
-.vs-legend .dot.verified { background: #24a868; }
-.vs-legend .dot.pending  { background: #a88424; }
-.vs-legend .dot.rejected { background: #c22b3e; }
-
 /* Responsive */
 @media (max-width: 900px) {
-  .vs-toolbar { flex-wrap: wrap; gap: 12px; }
-  .vs-filter, .vs-type, .vs-sort { flex: 1 1 220px; min-width: 0; }
+  .vs-toolbar-first {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .vs-pill-select { min-width: 0; }
 }
 
 @media (min-width: 1800px) {

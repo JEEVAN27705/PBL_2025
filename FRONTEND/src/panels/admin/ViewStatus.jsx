@@ -1,4 +1,3 @@
-// src/panels/admin/ViewStatus.jsx
 import React, { useEffect, useMemo, useState } from 'react';
 import './view-status.css';
 
@@ -11,7 +10,6 @@ const API_BASE =
   'http://localhost:5000';
 
 const STATUS_OPTIONS = ['All', 'Verified', 'Pending', 'Rejected'];
-const TYPE_OPTIONS = ['All', 'Exam', 'Holidays', 'Circular', 'Notice', 'Other'];
 const SORT_OPTIONS = [
   { key: 'date_desc', label: 'Newest first' },
   { key: 'date_asc', label: 'Oldest first' },
@@ -24,7 +22,6 @@ export default function ViewStatus() {
   const [loading, setLoading] = useState(true);
   const [q, setQ] = useState('');
   const [status, setStatus] = useState('All');
-  const [type, setType] = useState('All');
   const [sortKey, setSortKey] = useState('date_desc');
   const [error, setError] = useState('');
 
@@ -69,15 +66,27 @@ export default function ViewStatus() {
       );
     }
 
-    if (status !== 'All') list = list.filter(d => (d.status || 'Pending') === status);
-    if (type !== 'All') list = list.filter(d => (d.type || 'Other') === type);
+    if (status !== 'All') {
+      list = list.filter(d => {
+        const s = String(d.status || '').toLowerCase();
+        return (status === 'Verified' && s === 'verified')
+            || (status === 'Pending'  && s === 'pending')
+            || (status === 'Rejected' && s === 'rejected');
+      });
+    }
 
     switch (sortKey) {
       case 'date_asc':
-        list.sort((a, b) => new Date(a.updatedAt || a.approvedDate || a.createdAt || 0) - new Date(b.updatedAt || b.approvedDate || b.createdAt || 0));
+        list.sort((a, b) =>
+          new Date(a.updatedAt || a.approvedDate || a.createdAt || 0) -
+          new Date(b.updatedAt || b.approvedDate || b.createdAt || 0)
+        );
         break;
       case 'date_desc':
-        list.sort((a, b) => new Date(b.updatedAt || b.approvedDate || b.createdAt || 0) - new Date(a.updatedAt || a.approvedDate || a.createdAt || 0));
+        list.sort((a, b) =>
+          new Date(b.updatedAt || b.approvedDate || b.createdAt || 0) -
+          new Date(a.updatedAt || a.approvedDate || a.createdAt || 0)
+        );
         break;
       case 'title_asc':
         list.sort((a, b) => String(a.title).localeCompare(String(b.title)));
@@ -88,7 +97,7 @@ export default function ViewStatus() {
       default: break;
     }
     return list;
-  }, [docs, q, status, type, sortKey]);
+  }, [docs, q, status, sortKey]);
 
   const formatDate = (s) => {
     if (!s) return '-';
@@ -100,8 +109,12 @@ export default function ViewStatus() {
     return `${yyyy}-${mm}-${dd}`;
   };
 
-  const onView = (row) => window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/preview`, '_blank', 'noopener');
-  const onDownload = (row) => window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/download`, '_blank', 'noopener');
+  const onView = (row) =>
+    window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/preview`, '_blank', 'noopener');
+
+  const onDownload = (row) =>
+    window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/download`, '_blank', 'noopener');
+
   const onDelete = async (row) => {
     if (!confirm(`Delete "${row.title}"?`)) return;
     const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}`, {
@@ -117,27 +130,36 @@ export default function ViewStatus() {
     <div className="vs-page">
       <h1 className="vs-title">View Status</h1>
 
-      <div className="vs-toolbar">
+      {/* First-image style toolbar: pill dropdowns with embedded labels */}
+      <div className="vs-toolbar vs-toolbar-first">
         <input
-          className="vs-search"
+          className="vs-search vs-search-first"
           placeholder="Search documents..."
           value={q}
           onChange={(e) => setQ(e.target.value)}
         />
-        <select className="vs-filter" value={status} onChange={(e)=>setStatus(e.target.value)}>
-          {['All', 'Verified', 'Pending', 'Rejected'].map(s => <option key={s} value={s}>{s}</option>)}
-        </select>
-        <select className="vs-type" value={type} onChange={(e)=>setType(e.target.value)}>
-          {['All', 'Exam', 'Holidays', 'Circular', 'Notice', 'Other'].map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <select className="vs-sort" value={sortKey} onChange={(e)=>setSortKey(e.target.value)}>
-          {[
-            { key: 'date_desc', label: 'Newest first' },
-            { key: 'date_asc', label: 'Oldest first' },
-            { key: 'title_asc', label: 'Title A–Z' },
-            { key: 'title_desc', label: 'Title Z–A' },
-          ].map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
-        </select>
+
+        {/* Filter by Type style (shows label text inside the control) */}
+        <div className="vs-pill-select" data-placeholder="Filter by Type">
+          <select
+            aria-label="Filter by Status"
+            value={status}
+            onChange={(e)=>setStatus(e.target.value)}
+          >
+            {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+          </select>
+        </div>
+
+        {/* Sort by Date style (shows label text inside the control) */}
+        <div className="vs-pill-select" data-placeholder="Sort by Date">
+          <select
+            aria-label="Sort by"
+            value={sortKey}
+            onChange={(e)=>setSortKey(e.target.value)}
+          >
+            {SORT_OPTIONS.map(o => <option key={o.key} value={o.key}>{o.label}</option>)}
+          </select>
+        </div>
       </div>
 
       <div className="vs-card">
@@ -172,7 +194,6 @@ export default function ViewStatus() {
           </tbody>
         </table>
       </div>
-
     </div>
   );
 }
