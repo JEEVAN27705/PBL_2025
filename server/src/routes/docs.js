@@ -1,0 +1,69 @@
+// server/src/routes/docs.js
+import { Router } from 'express';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
+import Upload from '../models/Upload.js';
+import { auth } from '../middleware/auth.js';
+import { authorize } from '../middleware/roles.js';
+
+const router = Router();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const uploadsRoot = path.join(__dirname, '../uploads'); // adjust if needed
+
+// Utility to resolve first file of an Upload doc
+async function resolveFirstFile(id) {
+  if (!mongoose.Types.ObjectId.isValid(id)) return null;
+  const doc = await Upload.findById(id).lean();
+  if (!doc || !doc.files || !doc.files.length) return null;
+
+  const f = doc.files[0];
+  const absPath = path.isAbsolute(f.path) ? f.path : path.join(uploadsRoot, f.path);
+  const originalName = f.originalName || f.filename || 'document.pdf';
+  const mimetype = f.mimetype || 'application/pdf';
+  return { absPath, originalName, mimetype };
+}
+
+// GET /api/docs/:id/preview -> inline stream for iframe
+router.get('/:id/preview', auth, authorize(['admin']), async (req, res) => {
+  try {
+    const meta = await resolveFirstFile(req.params.id);
+    if (!meta) return res.status(404).json({ message: 'File not found' });
+
+    const { absPath, originalName, mimetype } = meta;
+    if (!fs.existsSync(absPath)) return res.status(404).json({ message: 'File missing on server' });
+
+    res.setHeader('Content-Type', mimetype);
+    res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(originalName)}"`);
+
+    const stream = fs.createReadStream(absPath);
+    stream.on('error', () => res.status(500).end());
+    stream.pipe(res);
+  } catch (e) {
+    console.error('PREVIEW ERROR:', e);
+    res.status(500).json({ message: 'Preview failed' });
+  }
+});
+
+// GET /api/docs/:id/download -> force download attachment
+router.get('/:id/download', auth, authorize(['admin']), async (req, res) => {
+  try {
+    const meta = await resolveFirstFile(req.params.id);
+    if (!meta) return res.status(404).json({ message: 'File not found' });
+
+    const { absPath, originalName, mimetype } = meta;
+    if (!fs.existsSync(absPath)) return res.status(404).json({ message: 'File missing on server' });
+
+    // Explicit type + attachment filename; Express sets Content-Disposition for download
+    res.setHeader('Content-Type', mimetype);
+    res.setHeader('Content-Disposition', `attachment; filename="${encodeURIComponent(originalName)}"`); // filename header for client parsing [web:86]
+    return res.download(absPath, originalName); // prompts download in browsers [web:116][web:117]
+  } catch (e) {
+    console.error('DOWNLOAD ERROR:', e);
+    res.status(500).json({ message: 'Download failed' });
+  }
+});
+
+export default router;

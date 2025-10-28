@@ -16,6 +16,9 @@ import DocumentArchive from './panels/admin/DocumentArchive.jsx';
 import PendingApprovals from './panels/admin/PendingApprovals.jsx';
 import ViewStatus from './panels/admin/ViewStatus.jsx';
 
+// NEW: import the preview page
+import DocumentPreview from './panels/admin/DocumentPreview.jsx';
+
 export default function App() {
   return (
     <Routes>
@@ -52,6 +55,9 @@ export default function App() {
           <Route path="archive" element={<DocumentArchive />} />
           <Route path="settings" element={<div style={{ color: '#e5e7eb', padding: 24 }}>Settings</div>} />
           <Route path="view" element={<ViewStatus />} />
+
+          {/* NEW: PDF preview route */}
+          <Route path="docs/:id/preview" element={<DocumentPreview />} />
         </Route>
       </Route>
 

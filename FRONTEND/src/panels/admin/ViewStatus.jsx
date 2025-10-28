@@ -1,4 +1,6 @@
+// FRONTEND/src/panels/admin/ViewStatus.jsx
 import React, { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './view-status.css';
 
 // Emoji icons
@@ -24,16 +26,17 @@ export default function ViewStatus() {
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [status, setStatus] = useState('All');
-  const [sortKey, setSortKey] = useState('date_desc');
+  const [sortKey, setSortKey] = useState('date_desc'); // newest → oldest by upload date
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
-  // Debounce search input (only apply after user pauses typing)
+  // Debounce search input
   useEffect(() => {
     const id = setTimeout(() => {
       setDebouncedSearch(searchTerm.trim().toLowerCase());
     }, 250);
     return () => clearTimeout(id);
-  }, [searchTerm]);
+  }, [searchTerm]); // Debouncing prevents over-filtering while typing. [web:80]
 
   // Fetch data
   useEffect(() => {
@@ -60,11 +63,22 @@ export default function ViewStatus() {
       }
     })();
     return () => { cancelled = true; };
-  }, []);
+  }, []); // Standard fetch pattern with cleanup avoids setting state after unmount. [web:96]
 
-  // Filter + sort
+  // Format strictly as YYYY-MM-DD (createdAt only)
+  const formatDate = (v) => {
+    if (!v) return '-';
+    const d = new Date(v);
+    if (isNaN(d.getTime())) return '-';
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, '0');
+    const dd = String(d.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  }; // Using native Date ensures consistent ISO-like formatting in UI. [web:96]
+
+  // Filter + sort (use only createdAt for dates)
   const filtered = useMemo(() => {
-    const norm = (v) => String(v || '').toLowerCase();
+    const norm = (val) => String(val || '').toLowerCase();
     let list = docs.slice();
 
     if (debouncedSearch) {
@@ -89,16 +103,10 @@ export default function ViewStatus() {
 
     switch (sortKey) {
       case 'date_asc':
-        list.sort((a, b) =>
-          new Date(a.updatedAt || a.approvedDate || a.createdAt || 0) -
-          new Date(b.updatedAt || b.approvedDate || b.createdAt || 0)
-        );
+        list.sort((a, b) => new Date(a.createdAt || 0) - new Date(b.createdAt || 0));
         break;
       case 'date_desc':
-        list.sort((a, b) =>
-          new Date(b.updatedAt || b.approvedDate || b.createdAt || 0) -
-          new Date(a.updatedAt || a.approvedDate || a.createdAt || 0)
-        );
+        list.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
         break;
       case 'title_asc':
         list.sort((a, b) => String(a.title || '').localeCompare(String(b.title || '')));
@@ -109,40 +117,90 @@ export default function ViewStatus() {
       default: break;
     }
     return list;
-  }, [docs, debouncedSearch, status, sortKey]);
+  }, [docs, debouncedSearch, status, sortKey]); // Memoization avoids unnecessary recomputation during typing. [web:80]
 
-  const formatDate = (s) => {
-    if (!s) return '-';
-    const d = new Date(s);
-    if (isNaN(d.getTime())) return '-';
-    const yyyy = d.getFullYear();
-    const mm = String(d.getMonth() + 1).padStart(2, '0');
-    const dd = String(d.getDate()).padStart(2, '0');
-    return `${yyyy}-${mm}-${dd}`;
-  };
+  // Navigate to in-app preview page instead of window.open
+  const onView = (row) => {
+    navigate(`/admin/docs/${row._id}/preview`, { state: { title: row.title } });
+  }; // Client-side navigation keeps session and avoids popup blockers. [web:96]
 
-  const onView = (row) =>
-    window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/preview`, '_blank', 'noopener');
+  // Helper: parse filename from Content-Disposition, with safe fallback
+  const getFilenameFromCD = (cd, fallback) => {
+    if (!cd) return fallback || 'document.pdf';
+    // filename*=UTF-8''encoded or filename="raw"
+    const star = /filename\*\s*=\s*UTF-8''([^;]+)/i.exec(cd);
+    if (star) {
+      try { return decodeURIComponent(star[1]); } catch (_) { /* ignore */ }
+    }
+    const plain = /filename\s*=\s*\"?([^\";]+)\"?/i.exec(cd);
+    if (plain) return plain[1];
+    return fallback || 'document.pdf';
+  }; // CD header supports filename and filename*, prefer filename* per MDN guidance. [web:86][web:89]
 
-  const onDownload = (row) =>
-    window.open(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/download`, '_blank', 'noopener');
+  // Robust downloader: fetch blob with auth, infer filename, trigger download
+  const onDownload = async (row) => {
+    try {
+      const token = localStorage.getItem('accessToken') || '';
+      const res = await fetch(
+        `${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}/download`,
+        {
+          method: 'GET',
+          credentials: 'include',
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      );
+      if (!res.ok) throw new Error(`Download failed: ${res.status}`);
 
+      const cd = res.headers.get('Content-Disposition');
+      const suggestedName = getFilenameFromCD(
+        cd,
+        `${(row.title || 'document').replace(/[\\/:*?"<>|]/g, '_')}.pdf`
+      );
+      const blob = await res.blob();
+
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = suggestedName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 250);
+    } catch (e) {
+      alert(e?.message || 'Download failed');
+    }
+  }; // The anchor download attribute with a blob URL forces a save dialog and works cross-browser for same-origin content. [web:80][web:90]
+
+  // Delete rule: Pending/Rejected => hard delete via API; Verified => UI-only removal
   const onDelete = async (row) => {
-    if (!confirm(`Delete "${row.title}"?`)) return;
-    const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-      headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` },
-    });
-    if (res.ok) setDocs(prev => prev.filter(x => x._id !== row._id));
-    else alert('Delete failed');
-  };
+    const s = String(row.status || '').toLowerCase();
+    if (!confirm(`Remove "${row.title}"?`)) return;
+
+    // Always remove from screen as requested
+    setDocs(prev => prev.filter(x => x._id !== row._id));
+
+    // For verified, stop here (no DB delete)
+    if (s === 'verified' || s === 'approved') return;
+
+    // For pending/rejected, hard delete in DB
+    try {
+      const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/docs/${row._id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+        headers: { Authorization: `Bearer ${localStorage.getItem('accessToken') || ''}` },
+      });
+      if (res.status === 204 || res.status === 404) return; // success or already gone [web:142]
+      throw new Error(`Delete failed: ${res.status}`);
+    } catch (e) {
+      setError(e?.message || 'Delete failed');
+    }
+  }; // Enforces rule at client: verified never hard-deleted, only hidden in UI. [web:156][web:167]
 
   return (
     <div className="vs-page">
       <h1 className="vs-title">View Status</h1>
 
-      {/* Toolbar (first-image style) */}
+      {/* Toolbar */}
       <div className="vs-toolbar vs-toolbar-first">
         <input
           className="vs-search vs-search-first"
@@ -181,7 +239,7 @@ export default function ViewStatus() {
               <th className="vs-title-cell">DOCUMENT TITLE</th>
               <th className="vs-center">TYPE</th>
               <th className="vs-center">STATUS</th>
-              <th className="vs-center">UPDATED DATE</th>
+              <th className="vs-center">UPLOADED DATE</th>
               <th className="vs-center">ACTIONS</th>
             </tr>
           </thead>
@@ -195,7 +253,7 @@ export default function ViewStatus() {
                 <td className="vs-title-cell">{doc.title || '-'}</td>
                 <td className="vs-center">{doc.type || 'Other'}</td>
                 <td className="vs-center"><StatusPill status={doc.status} /></td>
-                <td className="vs-center">{formatDate(doc.updatedAt || doc.approvedDate || doc.createdAt)}</td>
+                <td className="vs-center">{formatDate(doc.createdAt)}</td>
                 <td className="vs-center">
                   <button className="vs-action-btn" onClick={() => onView(doc)} aria-label="View"><Eye /></button>
                   <button className="vs-action-btn" onClick={() => onDownload(doc)} aria-label="Download"><Download /></button>

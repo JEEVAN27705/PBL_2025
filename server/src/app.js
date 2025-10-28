@@ -10,56 +10,50 @@ import { fileURLToPath } from 'url';
 
 import authRoutes from './routes/auth.routes.js';
 import uploadRoutes from './routes/upload.js';
-import viewStatusRoutes from './routes/viewStatus.js'; // NEW
+import viewStatusRoutes from './routes/viewStatus.js';
+import docsRoutes from './routes/docs.js';
 
-// Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function createApp() {
   const app = express();
 
-  // Security & logging
   app.use(helmet());
   app.use(morgan('dev'));
-
-  // Parsers
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(cookieParser());
 
-  // CORS
+  const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
   app.use(
     cors({
-      origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-      credentials: true
+      origin: allowedOrigin,
+      credentials: true,
+      exposedHeaders: ['Content-Disposition'],
+      methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // allow DELETE for preflight [web:111][web:137]
     })
   );
 
-  // Basic rate limit on API
   app.use(
     '/api',
     rateLimit({
       windowMs: 60 * 1000,
       max: 100,
       standardHeaders: true,
-      legacyHeaders: false
+      legacyHeaders: false,
     })
   );
 
-  // Static serving for uploaded files
   app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
-  // Routes
   app.use('/api/auth', authRoutes);
   app.use('/api/upload', uploadRoutes);
-  app.use('/api', viewStatusRoutes); // NEW: exposes GET /api/admin/view-status
+  app.use('/api', viewStatusRoutes);
+  app.use('/api/docs', docsRoutes);
 
-  // Health check
   app.get('/api/health', (_req, res) => res.json({ status: 'ok' }));
 
-  // 404
   app.use((req, res) => res.status(404).json({ message: 'Not found' }));
-
   return app;
 }
