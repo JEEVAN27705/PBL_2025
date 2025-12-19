@@ -118,7 +118,7 @@ export default function AdminLayout() {
           <span className="nav-text">Settings</span>
         </NavLink>
 
-        <div className="admin-profile" title="User Profile">
+        <Link to="settings" className="admin-profile" title="Account Settings">
           {hasAvatar ? (
             <img className="profile-avatar" src={avatarSrc} alt="avatar" />
           ) : (
@@ -130,14 +130,14 @@ export default function AdminLayout() {
           <div className="profile-text">
             <div className="profile-name">{displayName}</div>
           </div>
+        </Link>
 
-          <FiLogOut
-            className="profile-action"
-            aria-hidden="true"
-            title="Logout"
-            onClick={handleLogout}
-          />
-        </div>
+        <FiLogOut
+          className="profile-action"
+          aria-hidden="true"
+          title="Logout"
+          onClick={handleLogout}
+        />
       </aside>
 
       <main className="admin-main">

@@ -19,6 +19,7 @@ import ViewStatus from './panels/admin/ViewStatus.jsx';
 // NEW: import the preview page
 import DocumentPreview from './panels/admin/DocumentPreview.jsx';
 import Settings from './panels/admin/Settings.jsx';
+import UserSettings from './panels/user/UserSettings.jsx';
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
       <Route element={<ProtectedRoute allow={['user', 'admin']} />}>
         <Route path="/user" element={<UserLayout />}>
           <Route index element={<ChatPage />} />
+          <Route path="settings" element={<UserSettings />} />
           <Route
             path="history"
             element={<div style={{ color: '#e5e7eb', padding: 24 }}>History</div>}
