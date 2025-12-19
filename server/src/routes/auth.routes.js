@@ -86,8 +86,10 @@ router.post('/logout', (req, res) => {
 
 router.get('/me', auth, async (req, res) => {
   try {
+    res.set('Cache-Control', 'no-store');
     const me = await User.findById(req.user.id).lean();
     if (!me) return res.status(404).json({ message: 'User not found' });
+    // console.log('GET /me user:', me);
     return res.json({
       user: {
         id: String(me._id),
@@ -105,9 +107,26 @@ router.get('/me', auth, async (req, res) => {
 
 router.put('/me', auth, async (req, res) => {
   try {
-    const { fullName, password } = req.body;
+    const { fullName, password, email, adminScope } = req.body;
     const updates = {};
+
     if (fullName && fullName.trim()) updates.fullName = fullName.trim();
+    if (email && email.trim()) {
+      const newEmail = email.toLowerCase().trim();
+      // Check if email is already taken by another user
+      const exists = await User.findOne({ email: newEmail, _id: { $ne: req.user.id } });
+      if (exists) return res.status(409).json({ message: 'Email already in use' });
+      updates.email = newEmail;
+    }
+
+    if (req.user.role === 'admin' && adminScope) {
+      if (['accounts', 'hod', 'exam'].includes(adminScope)) {
+        updates.adminScope = adminScope;
+      } else {
+        return res.status(400).json({ message: 'Invalid department' });
+      }
+    }
+
     if (password && password.trim()) {
       updates.passwordHash = await bcrypt.hash(password.trim(), 10);
     }
@@ -129,7 +148,8 @@ router.put('/me', auth, async (req, res) => {
         fullName: updatedUser.fullName,
         email: updatedUser.email,
         role: updatedUser.role,
-        adminScope: updatedUser.adminScope
+        adminScope: updatedUser.adminScope,
+        avatarUrl: updatedUser.avatarUrl || ''
       }
     });
   } catch (e) {

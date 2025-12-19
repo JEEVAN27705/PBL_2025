@@ -9,6 +9,47 @@ By automating FAQs, the chatbot frees campus staff to focus on complex student n
 
 ---
 
+## 🛠️ How to Run Locally
+
+### Prerequisites
+- Node.js (v16 or higher recommended)
+- MongoDB (installed locally or use a cloud URI)
+
+### 1. Backend Setup
+The backend is an Express.js server running on port 5000.
+
+```bash
+cd server
+npm install
+
+# Create a .env file in the server directory with the following (adjust as needed):
+# PORT=5000
+# MONGODB_URI=mongodb://127.0.0.1:27017/pbl_2025
+# JWT_SECRET=your_secure_random_string
+# CORS_ORIGIN=http://localhost:5173
+
+# Start the server
+npm run dev
+```
+
+### 2. Frontend Setup
+The frontend is a Vite + React application running on port 5173.
+
+```bash
+cd frontend
+npm install
+
+# Start the development server
+npm run dev
+```
+
+### 3. Accessing the App
+Open your browser and navigate to:
+- **Frontend App**: [http://localhost:5173](http://localhost:5173)
+- **Backend API**: [http://localhost:5000](http://localhost:5000)
+
+---
+
 ## 🧩 Problem Statement
 - Students struggle to access important information quickly.  
 - Campus offices handle repetitive questions that could be automated.  
@@ -46,12 +87,11 @@ The chatbot will:
 ---
 
 ## 🧰 Technologies Used
-- **Frontend:** HTML, CSS, JavaScript (for chatbot widget integration)  
-- **Backend:** Python / Django / Node.js  
-- **NLP Frameworks:** Rasa, Dialogflow, or OpenAI API for multilingual processing  
-- **Databases:** MySQL or MongoDB (for logs and FAQs)  
-- **Languages Supported:** English, Hindi, Marathi (extendable to others)  
-- **Deployment:** College Website, WhatsApp API, Telegram Bot
+- **Frontend:** HTML, CSS, JavaScript, React (Vite)
+- **Backend:** Node.js, Express.js
+- **NLP Frameworks:** Integration ready (e.g., Gemini, OpenAI, or Rasa)
+- **Databases:** MongoDB (for logs, users, and documents)
+- **Languages Supported:** English, Hindi, Marathi (extendable)
 
 ---
 
@@ -103,4 +143,3 @@ This project is developed as part of **PBL 2025** and is intended for educationa
 ### 🧑‍💻 Author
 **Jeevan Patil**  
 GitHub: [@JEEVAN27705](https://github.com/JEEVAN27705)
-

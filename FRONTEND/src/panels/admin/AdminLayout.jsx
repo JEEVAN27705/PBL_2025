@@ -15,14 +15,14 @@ export default function AdminLayout() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Initial fetch
     let cancelled = false;
-    (async () => {
+    const fetchProfile = async () => {
       try {
         const token = localStorage.getItem('accessToken') || '';
         if (!token) { setLoading(false); return; }
         const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
-          credentials: 'include',
         });
         if (!res.ok) throw new Error('Profile load failed');
         const data = await res.json();
@@ -33,23 +33,48 @@ export default function AdminLayout() {
             email: u.email || '',
             avatarUrl: u.avatarUrl || '',
           });
+          // Sync to LS too
+          localStorage.setItem('user', JSON.stringify(u));
         }
       } catch {
         if (!cancelled) setMe({ fullName: '', email: '', avatarUrl: '' });
       } finally {
         if (!cancelled) setLoading(false);
       }
-    })();
-    return () => { cancelled = true; };
+    };
+
+    fetchProfile();
+
+    // Listen for local updates
+    const handleLocalUpdate = () => {
+      try {
+        const u = JSON.parse(localStorage.getItem('user') || '{}');
+        setMe({
+          fullName: u.fullName || '',
+          email: u.email || '',
+          avatarUrl: u.avatarUrl || '',
+        });
+      } catch { }
+    };
+
+    window.addEventListener('user-updated', handleLocalUpdate);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('user-updated', handleLocalUpdate);
+    };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem('accessToken');
+    localStorage.removeItem('user');
     window.location.href = '/login';
   };
 
   const displayName = loading ? 'Loading…' : (me.fullName || me.email || 'User');
   const hasAvatar = Boolean(me.avatarUrl && me.avatarUrl.trim());
+  const avatarSrc = hasAvatar
+    ? (me.avatarUrl.startsWith('http') ? me.avatarUrl : `${API_BASE.replace(/\/+$/, '')}${me.avatarUrl}`)
+    : '';
 
   return (
     <div className="admin-shell">
@@ -95,7 +120,7 @@ export default function AdminLayout() {
 
         <div className="admin-profile" title="User Profile">
           {hasAvatar ? (
-            <img className="profile-avatar" src={me.avatarUrl} alt="avatar" />
+            <img className="profile-avatar" src={avatarSrc} alt="avatar" />
           ) : (
             <div className="profile-avatar placeholder" aria-label="default avatar">
               <FiUser className="avatar-icon" />

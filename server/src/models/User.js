@@ -11,7 +11,8 @@ const usersSchema = new mongoose.Schema(
       type: String,
       enum: ['accounts', 'hod', 'exam'],
       required: function () { return this.role === 'admin'; }
-    }
+    },
+    avatarUrl: { type: String }
   },
   { timestamps: true }
 );
