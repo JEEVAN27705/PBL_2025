@@ -2,7 +2,12 @@ import jwt from 'jsonwebtoken';
 
 export function signAccessToken(user) {
   return jwt.sign(
-    { sub: String(user._id), role: user.role, email: user.email },
+    {
+      sub: String(user._id),
+      role: user.role,
+      email: user.email,
+      adminScope: user.adminScope
+    },
     process.env.JWT_SECRET,
     { expiresIn: '12h' }
   );

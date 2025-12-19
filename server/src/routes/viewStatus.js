@@ -75,12 +75,18 @@ router.get('/admin/pending-approvals', auth, authorize(['admin']), async (req, r
 
     // Map adminScope to verifyDept
     // Schema enum: ['Accounts', 'HR', 'Legal']
-    let targetDept = 'Accounts';
+    let targetDept = null;
+
     if (scope === 'hod') targetDept = 'HR';
-    else if (scope === 'exam') targetDept = 'Legal'; // adjusting for schema mismatch
+    else if (scope === 'exam') targetDept = 'Legal';
     else if (scope === 'accounts') targetDept = 'Accounts';
 
     console.log(`[Pending] Mapped scope '${scope}' to targetDept '${targetDept}'`);
+
+    if (!targetDept) {
+      console.log('[Pending] No valid targetDept derived from scope. Returning empty.');
+      return res.json([]);
+    }
 
     const filter = {
       status: 'pending',

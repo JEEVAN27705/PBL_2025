@@ -103,6 +103,41 @@ router.get('/me', auth, async (req, res) => {
   }
 });
 
+router.put('/me', auth, async (req, res) => {
+  try {
+    const { fullName, password } = req.body;
+    const updates = {};
+    if (fullName && fullName.trim()) updates.fullName = fullName.trim();
+    if (password && password.trim()) {
+      updates.passwordHash = await bcrypt.hash(password.trim(), 10);
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ message: 'No changes provided' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user.id,
+      { $set: updates },
+      { new: true }
+    ).lean();
+
+    return res.json({
+      message: 'Profile updated',
+      user: {
+        id: String(updatedUser._id),
+        fullName: updatedUser.fullName,
+        email: updatedUser.email,
+        role: updatedUser.role,
+        adminScope: updatedUser.adminScope
+      }
+    });
+  } catch (e) {
+    console.error('Update profile error:', e);
+    return res.status(500).json({ message: 'Update failed' });
+  }
+});
+
 router.get('/admin/ping', auth, authorize(['admin']), (req, res) => {
   return res.json({ ok: true, role: 'admin' });
 });

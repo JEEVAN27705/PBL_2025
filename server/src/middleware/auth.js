@@ -11,7 +11,12 @@ export function auth(req, res, next) {
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET);
     // keep minimal fields; load the rest in the route
-    req.user = { id: payload.sub, role: payload.role, email: payload.email };
+    req.user = {
+      id: payload.sub,
+      role: payload.role,
+      email: payload.email,
+      adminScope: payload.adminScope
+    };
     next();
   } catch {
     return res.status(401).json({ message: 'Invalid or expired token' });

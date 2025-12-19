@@ -1,0 +1,138 @@
+/* Professional Dark Settings Theme */
+
+.settings-container {
+    padding: 40px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: "Times New Roman", Times, serif;
+    color: #e5e7eb;
+}
+
+.settings-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 30px;
+    color: #f3f4f6;
+    border-bottom: 2px solid #1f2a3f;
+    padding-bottom: 15px;
+    background: linear-gradient(90deg, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.settings-card {
+    background: linear-gradient(145deg, #0f1626, #0a0f1c);
+    border: 1px solid #1f2a3f;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.settings-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+.form-group input {
+    background: #050b14;
+    border: 1px solid #1f2a3f;
+    padding: 14px 18px;
+    border-radius: 8px;
+    color: #e5e7eb;
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+    transition: all 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+.form-divider {
+    height: 1px;
+    background: #1f2a3f;
+    margin: 10px 0;
+}
+
+.section-subtitle {
+    font-size: 20px;
+    font-weight: 700;
+    color: #e2e8f0;
+    margin: 0;
+}
+
+.section-desc {
+    font-size: 14px;
+    color: #64748b;
+    margin: -15px 0 0 0;
+    font-style: italic;
+}
+
+.form-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-save {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    font-family: "Times New Roman", Times, serif;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-save:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.btn-save:active {
+    transform: translateY(0);
+}
+
+.btn-save:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.settings-info {
+    margin-top: 30px;
+    background: rgba(31, 41, 55, 0.3);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid #1f2a3f;
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+.settings-info p {
+    margin: 8px 0;
+}
+
+.settings-info strong {
+    color: #cbd5e1;
+}
