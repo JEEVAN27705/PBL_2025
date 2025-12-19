@@ -24,7 +24,10 @@ export default function Terms() {
   }, []);
 
   const handleCancel = () => navigate('/register');
-  const handleAgree = () => navigate('/register');
+  const handleAgree = () => {
+    localStorage.setItem('termsAgreed', 'true');
+    navigate('/register');
+  };
 
   return (
     <div className="tos-wrap pro">
@@ -36,22 +39,22 @@ export default function Terms() {
             aria-label="Back to registration"
             onClick={() => navigate('/register')}
           >
-           <svg
-            className="tos-backicon-svg"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-            focusable="false" 
+            <svg
+              className="tos-backicon-svg"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
             >
-            
-          <path
-            d="M15 19 L8 12 L15 5"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3.2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            />
-          </svg>
+
+              <path
+                d="M15 19 L8 12 L15 5"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="3.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
 
           </button>
         </div>

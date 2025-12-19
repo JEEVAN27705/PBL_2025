@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
 import '../styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/Logo.jpeg';
 import { loginRequest } from '../api/auth/login';
+import CustomDropdown from './common/CustomDropdown';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -16,6 +16,11 @@ export default function Login() {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const submitBtnRef = useRef(null);
+
+  const roleOptions = [
+    { label: 'Admin', value: 'admin' },
+    { label: 'User', value: 'user' }
+  ];
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -61,10 +66,6 @@ export default function Login() {
     <div className="app">
       <main className="main-content">
         <div className="login-container">
-          <div className="brand-mark">
-            <div className="brand-logo"><img src={logo} alt="App logo" /></div>
-          </div>
-
           <div className="welcome-section">
             <h1 className="welcome-title">Welcome back</h1>
             <p className="welcome-subtitle">Sign in to continue your conversations.</p>
@@ -79,7 +80,7 @@ export default function Login() {
                 type="text"
                 placeholder="Username or Email"
                 value={username}
-                onChange={(e)=>setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 onKeyDown={onUsernameKeyDown}
                 className="form-input"
                 autoComplete="username"
@@ -92,31 +93,26 @@ export default function Login() {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={onPasswordKeyDown}
                 className="form-input"
                 autoComplete="current-password"
               />
             </div>
             <div className="form-group">
-              <select
-                name="role"
+              <CustomDropdown
+                options={roleOptions}
                 value={role}
-                onChange={(e)=>setRole(e.target.value)}
-                className="form-input"
-                aria-label="Select role"
-              >
-                <option value="" disabled>Select role</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-              </select>
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="Select role"
+              />
             </div>
             <div className="form-options">
               <label className="checkbox-container">
                 <input
                   type="checkbox"
                   checked={rememberMe}
-                  onChange={(e)=>setRememberMe(e.target.checked)}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="checkbox-input"
                 />
                 <span className="checkbox-custom"></span>
@@ -127,8 +123,6 @@ export default function Login() {
               {loading ? 'Logging in...' : 'Login'}
             </button>
           </form>
-
-          <div className="divider"><span className="divider-text">Or continue with</span></div>
 
           <div className="signup-section">
             <span className="signup-text">Don't have an account? </span>

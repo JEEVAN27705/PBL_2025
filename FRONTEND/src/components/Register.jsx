@@ -1,35 +1,55 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import '../styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/Logo.jpeg';
 import { registerRequest } from '../api/auth/register';
+import CustomDropdown from './common/CustomDropdown';
 
 export default function Register() {
   const [fullName, setFullName] = useState('');
-  const [email, setEmail]       = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [agreeTos, setAgreeTos] = useState(false);
-  const [role, setRole]         = useState('');
+  const [role, setRole] = useState('');
   const [adminScope, setAdminScope] = useState('');
 
-  const [error, setError]       = useState('');
-  const [loading, setLoading]   = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const fullNameRef  = useRef(null);
-  const emailRef     = useRef(null);
-  const passwordRef  = useRef(null);
+  const fullNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const submitBtnRef = useRef(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check if user agreed on the Terms page
+    const agreed = localStorage.getItem('termsAgreed');
+    if (agreed === 'true') {
+      setAgreeTos(true);
+      localStorage.removeItem('termsAgreed'); // Clean up
+    }
+  }, []);
+
+  const roleOptions = [
+    { label: 'Admin', value: 'admin' },
+    { label: 'User', value: 'user' }
+  ];
+
+  const departmentOptions = [
+    { label: 'Accounts', value: 'accounts' },
+    { label: 'HOD', value: 'hod' },
+    { label: 'Exam', value: 'exam' }
+  ];
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
 
     if (!fullName.trim()) { fullNameRef.current?.focus(); return; }
-    if (!email.trim())    { emailRef.current?.focus();    return; }
-    if (!password)        { passwordRef.current?.focus(); return; }
-    if (!role)            { alert('Select a role');        return; }
+    if (!email.trim()) { emailRef.current?.focus(); return; }
+    if (!password) { passwordRef.current?.focus(); return; }
+    if (!role) { alert('Select a role'); return; }
 
     if (role === 'admin' && !adminScope) {
       alert('Select Department');
@@ -53,7 +73,7 @@ export default function Register() {
       if (data?.user) {
         try {
           localStorage.setItem('user', JSON.stringify(data.user));
-        } catch {}
+        } catch { }
       }
 
       // Prefer server role if present
@@ -68,19 +88,13 @@ export default function Register() {
   };
 
   const onFullNameKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); emailRef.current?.focus(); } };
-  const onEmailKeyDown    = (e) => { if (e.key === 'Enter') { e.preventDefault(); passwordRef.current?.focus(); } };
+  const onEmailKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); passwordRef.current?.focus(); } };
   const onPasswordKeyDown = (e) => { if (e.key === 'Enter') { e.preventDefault(); submitBtnRef.current?.click(); } };
 
   return (
     <div className="app">
       <main className="main-content">
         <div className="login-container">
-          <div className="brand-mark">
-            <div className="brand-logo">
-              <img src={logo} alt="App logo" />
-            </div>
-          </div>
-
           <div className="welcome-section">
             <h1 className="welcome-title">Create an account</h1>
           </div>
@@ -94,7 +108,7 @@ export default function Register() {
                 type="text"
                 placeholder="Full Name"
                 value={fullName}
-                onChange={(e)=>setFullName(e.target.value)}
+                onChange={(e) => setFullName(e.target.value)}
                 onKeyDown={onFullNameKeyDown}
                 className="form-input"
                 autoComplete="name"
@@ -108,7 +122,7 @@ export default function Register() {
                 type="email"
                 placeholder="Email address"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 onKeyDown={onEmailKeyDown}
                 className="form-input"
                 autoComplete="email"
@@ -121,7 +135,7 @@ export default function Register() {
                 type="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e)=>setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={onPasswordKeyDown}
                 className="form-input"
                 autoComplete="new-password"
@@ -129,33 +143,22 @@ export default function Register() {
             </div>
 
             <div className="form-group">
-              <select
-                name="role"
+              <CustomDropdown
+                options={roleOptions}
                 value={role}
-                onChange={(e)=>setRole(e.target.value)}
-                className="form-input"
-                aria-label="Select role"
-              >
-                <option value="" disabled>Select role</option>
-                <option value="admin">Admin</option>
-                <option value="user">User</option>
-              </select>
+                onChange={(e) => setRole(e.target.value)}
+                placeholder="Select role"
+              />
             </div>
 
             {role === 'admin' && (
               <div className="form-group">
-                <select
-                  name="adminScope"
+                <CustomDropdown
+                  options={departmentOptions}
                   value={adminScope}
-                  onChange={(e)=>setAdminScope(e.target.value)}
-                  className="form-input"
-                  aria-label="Select Department"
-                >
-                  <option value="" disabled>Select Department</option>
-                  <option value="accounts">Accounts</option>
-                  <option value="hod">HOD</option>
-                  <option value="exam">Exam</option>
-                </select>
+                  onChange={(e) => setAdminScope(e.target.value)}
+                  placeholder="Select Department"
+                />
               </div>
             )}
 
@@ -164,7 +167,7 @@ export default function Register() {
                 <input
                   type="checkbox"
                   checked={agreeTos}
-                  onChange={(e)=>setAgreeTos(e.target.checked)}
+                  onChange={(e) => setAgreeTos(e.target.checked)}
                   className="checkbox-input"
                 />
                 <span className="checkbox-custom"></span>
@@ -180,15 +183,6 @@ export default function Register() {
               {loading ? 'Signing up...' : 'Sign up'}
             </button>
           </form>
-
-          <div className="divider">
-            <span className="divider-text">Or continue with</span>
-          </div>
-
-          <div className="social-buttons">
-            <button className="social-button google-button" onClick={()=>{}}>Google</button>
-            <button className="social-button facebook-button" onClick={()=>{}}>Facebook</button>
-          </div>
 
           <div className="signup-section">
             <span className="signup-text">Already Have an Account?</span>
