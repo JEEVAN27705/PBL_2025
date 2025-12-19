@@ -66,4 +66,31 @@ router.get('/:id/download', auth, authorize(['admin']), async (req, res) => {
   }
 });
 
+// PUT /api/docs/:id/status -> Approve/Reject
+router.put('/:id/status', auth, authorize(['admin']), async (req, res) => {
+  try {
+    const { status } = req.body; // 'verified' or 'rejected'
+    if (!['verified', 'rejected'].includes(status)) {
+      return res.status(400).json({ message: 'Invalid status' });
+    }
+
+    const doc = await Upload.findById(req.params.id);
+    if (!doc) return res.status(404).json({ message: 'Document not found' });
+
+    // Optional: check if admin belongs to correct department
+    // const scope = req.user.adminScope;
+    // ... logic same as pending-approvals if strict enforcement needed
+
+    doc.status = status;
+    doc.verifiedBy = req.user.email || req.user.fullName;
+    doc.verifiedAt = new Date();
+    await doc.save();
+
+    return res.json({ message: `Document ${status}`, doc });
+  } catch (e) {
+    console.error('UPDATE STATUS ERROR:', e);
+    return res.status(500).json({ message: 'Update failed' });
+  }
+});
+
 export default router;

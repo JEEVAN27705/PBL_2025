@@ -45,12 +45,16 @@
   font-size: 16px;
   transition: border-color .15s, box-shadow .15s, background .15s;
 }
+
 .vs-search-first:focus {
   outline: none;
   border-color: #3a62ff;
-  box-shadow: 0 0 0 2px rgba(58,98,255,.25);
+  box-shadow: 0 0 0 2px rgba(58, 98, 255, .25);
 }
-.vs-search-first:hover { background: #111b2d; }
+
+.vs-search-first:hover {
+  background: #111b2d;
+}
 
 /* Pill select that shows a placeholder label inside (like “Filter by Type”)*/
 .vs-pill-select {
@@ -62,7 +66,8 @@
   background: #0f1626;
   display: grid;
   align-items: center;
-  padding: 0 42px 0 14px; /* caret spacing */
+  padding: 0 42px 0 14px;
+  /* caret spacing */
   color: #e5e7eb;
 }
 
@@ -81,7 +86,8 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;            /* hide native text to keep placeholder style */
+  opacity: 0;
+  /* hide native text to keep placeholder style */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -95,7 +101,8 @@
   right: 14px;
   top: 50%;
   transform: translateY(-40%);
-  width: 0; height: 0;
+  width: 0;
+  height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
   border-top: 7px solid #cfd6e4;
@@ -105,7 +112,7 @@
 /* Focus ring when user opens/targets the select */
 .vs-pill-select:has(select:focus) {
   border-color: #3a62ff;
-  box-shadow: 0 0 0 2px rgba(58,98,255,.25);
+  box-shadow: 0 0 0 2px rgba(58, 98, 255, .25);
 }
 
 /* Table */
@@ -128,8 +135,15 @@
   border-top: 1px solid #2a3856;
   text-align: center;
 }
-.vs-table thead th:first-child { border-top-left-radius: 8px; text-align: left; }
-.vs-table thead th:last-child  { border-top-right-radius: 8px; }
+
+.vs-table thead th:first-child {
+  border-top-left-radius: 8px;
+  text-align: left;
+}
+
+.vs-table thead th:last-child {
+  border-top-right-radius: 8px;
+}
 
 /* Body rows */
 .vs-table tbody td {
@@ -138,24 +152,49 @@
   background: transparent;
   font-size: 15px;
 }
-.vs-title-cell { text-align: left; }
-.vs-center { text-align: center; }
+
+.vs-title-cell {
+  text-align: left;
+}
+
+.vs-center {
+  text-align: center;
+}
 
 /* Zebra + hover */
-.vs-table tbody tr:nth-child(odd) { background: rgba(19, 26, 38, 0.35); }
-.vs-table tbody tr:hover { background: #162238; }
+.vs-table tbody tr:nth-child(odd) {
+  background: rgba(19, 26, 38, 0.35);
+}
+
+.vs-table tbody tr:hover {
+  background: #162238;
+}
 
 /* Column widths */
 .vs-table thead th:nth-child(1),
-.vs-table tbody td:nth-child(1) { width: 40%; }
+.vs-table tbody td:nth-child(1) {
+  width: 35%;
+}
+
 .vs-table thead th:nth-child(2),
-.vs-table tbody td:nth-child(2) { width: 14%; }
+.vs-table tbody td:nth-child(2) {
+  width: 14%;
+}
+
 .vs-table thead th:nth-child(3),
-.vs-table tbody td:nth-child(3) { width: 16%; }
+.vs-table tbody td:nth-child(3) {
+  width: 16%;
+}
+
 .vs-table thead th:nth-child(4),
-.vs-table tbody td:nth-child(4) { width: 18%; }
+.vs-table tbody td:nth-child(4) {
+  width: 18%;
+}
+
 .vs-table thead th:nth-child(5),
-.vs-table tbody td:nth-child(5) { width: 12%; }
+.vs-table tbody td:nth-child(5) {
+  width: 17%;
+}
 
 /* Status pills */
 .vs-pill {
@@ -166,16 +205,19 @@
   font-weight: 700;
   letter-spacing: 0.2px;
 }
+
 .vs-pill.verified {
   color: #8af0a2;
   background: rgba(36, 168, 104, 0.18);
   border: 1px solid rgba(36, 168, 104, 0.35);
 }
+
 .vs-pill.pending {
   color: #f0d28a;
   background: rgba(168, 132, 36, 0.18);
   border: 1px solid rgba(168, 132, 36, 0.35);
 }
+
 .vs-pill.rejected {
   color: #ff9aa4;
   background: rgba(194, 43, 62, 0.18);
@@ -183,11 +225,18 @@
 }
 
 /* Action buttons */
+.vs-actions-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
 .vs-action-btn {
   background: none;
   border: none;
   color: #9fb0c9;
-  margin: 0 6px;
   font-size: 18px;
   cursor: pointer;
   line-height: 1;
@@ -199,9 +248,20 @@
   border-radius: 6px;
   transition: background .12s, color .12s, transform .06s;
 }
-.vs-action-btn:hover  { background: #1a2a47; color: #5c86ff; }
-.vs-action-btn:active { transform: translateY(1px); }
-.vs-action-btn.danger:hover { background: #2a1a1a; color: #ff6b6b; }
+
+.vs-action-btn:hover {
+  background: #1a2a47;
+  color: #5c86ff;
+}
+
+.vs-action-btn:active {
+  transform: translateY(1px);
+}
+
+.vs-action-btn.danger:hover {
+  background: #2a1a1a;
+  color: #ff6b6b;
+}
 
 /* Responsive */
 @media (max-width: 900px) {
@@ -209,10 +269,18 @@
     grid-template-columns: 1fr;
     gap: 12px;
   }
-  .vs-pill-select { min-width: 0; }
+
+  .vs-pill-select {
+    min-width: 0;
+  }
 }
 
 @media (min-width: 1800px) {
-  .vs-table { font-size: 17px; }
-  .vs-title { font-size: 36px; }
+  .vs-table {
+    font-size: 17px;
+  }
+
+  .vs-title {
+    font-size: 36px;
+  }
 }

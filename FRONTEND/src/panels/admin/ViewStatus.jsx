@@ -96,8 +96,8 @@ export default function ViewStatus() {
       list = list.filter(d => {
         const s = norm(d.status);
         return (status === 'Verified' && s === 'verified')
-            || (status === 'Pending'  && s === 'pending')
-            || (status === 'Rejected' && s === 'rejected');
+          || (status === 'Pending' && s === 'pending')
+          || (status === 'Rejected' && s === 'rejected');
       });
     }
 
@@ -255,9 +255,11 @@ export default function ViewStatus() {
                 <td className="vs-center"><StatusPill status={doc.status} /></td>
                 <td className="vs-center">{formatDate(doc.createdAt)}</td>
                 <td className="vs-center">
-                  <button className="vs-action-btn" onClick={() => onView(doc)} aria-label="View"><Eye /></button>
-                  <button className="vs-action-btn" onClick={() => onDownload(doc)} aria-label="Download"><Download /></button>
-                  <button className="vs-action-btn danger" onClick={() => onDelete(doc)} aria-label="Delete"><Trash /></button>
+                  <div className="vs-actions-wrapper">
+                    <button className="vs-action-btn" onClick={() => onView(doc)} aria-label="View"><Eye /></button>
+                    <button className="vs-action-btn" onClick={() => onDownload(doc)} aria-label="Download"><Download /></button>
+                    <button className="vs-action-btn danger" onClick={() => onDelete(doc)} aria-label="Delete"><Trash /></button>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -62,4 +62,49 @@ router.get('/admin/view-status', auth, authorize(['admin']), async (req, res) =>
   }
 });
 
+/**
+ * GET /api/admin/pending-approvals
+ * Fetch documents waiting for verification by this admin's department
+ */
+router.get('/admin/pending-approvals', auth, authorize(['admin']), async (req, res) => {
+  try {
+    const { q } = req.query;
+    const scope = req.user.adminScope; // accounts, hod, exam
+
+    console.log(`[Pending] User: ${req.user.email} (${req.user.id}), Role: ${req.user.role}, Scope: ${scope}`);
+
+    // Map adminScope to verifyDept
+    // Schema enum: ['Accounts', 'HR', 'Legal']
+    let targetDept = 'Accounts';
+    if (scope === 'hod') targetDept = 'HR';
+    else if (scope === 'exam') targetDept = 'Legal'; // adjusting for schema mismatch
+    else if (scope === 'accounts') targetDept = 'Accounts';
+
+    console.log(`[Pending] Mapped scope '${scope}' to targetDept '${targetDept}'`);
+
+    const filter = {
+      status: 'pending',
+      verifyDept: targetDept
+    };
+
+    if (q && String(q).trim()) {
+      const rx = new RegExp(String(q).trim(), 'i');
+      filter.$or = [
+        { title: rx },
+        { type: rx },
+        { uploadedBy: rx }
+      ];
+    }
+
+    console.log('[Pending] Filter:', JSON.stringify(filter));
+
+    const docs = await Upload.find(filter).sort({ createdAt: 1 }).lean(); // oldest first usually for queue
+    console.log(`[Pending] Found ${docs.length} docs`);
+    return res.json(docs);
+  } catch (e) {
+    console.error('GET /admin/pending-approvals error:', e);
+    return res.status(500).json({ message: 'Server error' });
+  }
+});
+
 export default router;
