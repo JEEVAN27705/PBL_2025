@@ -6,12 +6,7 @@ const usersSchema = new mongoose.Schema(
     fullName: { type: String, required: true, trim: true },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     passwordHash: { type: String, required: true },
-    role: { type: String, enum: ['admin', 'user'], default: 'user', index: true },
-    adminScope: {
-      type: String,
-      enum: ['accounts', 'hod', 'exam'],
-      required: function () { return this.role === 'admin'; }
-    },
+    role: { type: String, default: 'user', immutable: true },
     avatarUrl: { type: String }
   },
   { timestamps: true }

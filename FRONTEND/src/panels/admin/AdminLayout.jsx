@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, Link } from 'react-router-dom';
 import './admin.css';
 
 import {
@@ -130,14 +130,18 @@ export default function AdminLayout() {
           <div className="profile-text">
             <div className="profile-name">{displayName}</div>
           </div>
-        </Link>
 
-        <FiLogOut
-          className="profile-action"
-          aria-hidden="true"
-          title="Logout"
-          onClick={handleLogout}
-        />
+          <FiLogOut
+            className="profile-action"
+            aria-hidden="true"
+            title="Logout"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleLogout();
+            }}
+          />
+        </Link>
       </aside>
 
       <main className="admin-main">

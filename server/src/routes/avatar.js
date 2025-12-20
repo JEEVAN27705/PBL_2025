@@ -3,6 +3,7 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 import { auth } from '../middleware/auth.js';
 
 const router = Router();
@@ -45,7 +46,8 @@ router.post('/', auth, upload.single('avatar'), async (req, res) => {
         const avatarUrl = `/uploads/avatars/${req.file.filename}`;
 
         // Update user
-        const user = await User.findById(req.user.id);
+        const Model = req.user.role === 'admin' ? Admin : User;
+        const user = await Model.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
         // Optional: Delete old avatar if it exists to save space
@@ -74,7 +76,8 @@ router.post('/', auth, upload.single('avatar'), async (req, res) => {
  */
 router.delete('/', auth, async (req, res) => {
     try {
-        const user = await User.findById(req.user.id);
+        const Model = req.user.role === 'admin' ? Admin : User;
+        const user = await Model.findById(req.user.id);
         if (!user) return res.status(404).json({ message: 'User not found' });
 
         if (user.avatarUrl) {
