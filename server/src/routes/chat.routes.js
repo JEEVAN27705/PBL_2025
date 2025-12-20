@@ -1,6 +1,8 @@
 // server/src/routes/chat.routes.js
 import { Router } from 'express';
 import DashboardMessage from '../models/DashboardMessage.js';
+import User from '../models/User.js';
+import Admin from '../models/Admin.js';
 import { auth } from '../middleware/auth.js';
 
 const router = Router();
@@ -56,10 +58,20 @@ router.post('/', auth, async (req, res) => {
             }
         }
 
+        let name = senderName || req.user.fullName;
+
+        // Fallback: if token is old and doesn't have name, fetch from DB once
+        if (!name) {
+            const Model = req.user.role === 'admin' ? Admin : User;
+            const u = await Model.findById(req.user.id).select('fullName').lean();
+            if (u) name = u.fullName;
+        }
+
         const msg = await DashboardMessage.create({
             sender: req.user.id,
-            senderName: senderName || req.user.fullName || 'Unknown',
+            senderName: name || 'Unknown',
             senderRole: req.user.role,
+            senderDept: req.user.adminScope || (req.user.role === 'admin' ? 'Central' : 'User'),
             content,
             mentionedRole,
             isPrivate

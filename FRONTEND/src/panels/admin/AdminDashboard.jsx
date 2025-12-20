@@ -180,13 +180,19 @@ export default function AdminDashboard() {
                         <h3>Community Chat</h3>
                     </div>
                     <div className="chat-messages">
-                        {messages.map((msg, i) => (
-                            <div key={msg._id || i} className={`chat-bubble ${msg.isPrivate ? 'private' : 'public'}`}>
-                                <span className="sender">{msg.senderName} {msg.isPrivate ? '(Private)' : ''}</span>
-                                <div className="content">{msg.content}</div>
-                                <span className="time">{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            </div>
-                        ))}
+                        {messages.map((msg, i) => {
+                            const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+                            const isSent = msg.sender === currentUser.id;
+                            return (
+                                <div key={msg._id || i} className={`chat-bubble ${isSent ? 'sent' : 'received'} ${msg.isPrivate ? 'private' : ''}`}>
+                                    <span className="sender">
+                                        {msg.senderName} ({msg.senderDept || 'Admin'}) {msg.isPrivate ? '🔒' : ''}
+                                    </span>
+                                    <div className="content">{msg.content}</div>
+                                    <span className="time">{new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                </div>
+                            );
+                        })}
                         <div ref={chatEndRef} />
                     </div>
                     <form className="chat-input-wrap" onSubmit={handleSendMessage}>

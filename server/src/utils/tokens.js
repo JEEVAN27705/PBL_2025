@@ -6,6 +6,7 @@ export function signAccessToken(user) {
       sub: String(user._id),
       role: user.role,
       email: user.email,
+      fullName: user.fullName,
       adminScope: user.adminScope
     },
     process.env.JWT_SECRET,

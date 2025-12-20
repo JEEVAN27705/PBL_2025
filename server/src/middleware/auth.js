@@ -15,6 +15,7 @@ export function auth(req, res, next) {
       id: payload.sub,
       role: payload.role,
       email: payload.email,
+      fullName: payload.fullName,
       adminScope: payload.adminScope
     };
     next();

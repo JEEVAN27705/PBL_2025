@@ -143,34 +143,55 @@
 .chat-bubble {
     padding: 0.75rem 1rem;
     border-radius: 1rem;
-    max-width: 85%;
+    max-width: 80%;
     font-size: 0.875rem;
     position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    line-height: 1.4;
+    transition: transform 0.2s ease;
 }
 
-.chat-bubble.public {
-    background: rgba(255, 255, 255, 0.03);
+.chat-bubble:hover {
+    transform: scale(1.01);
+}
+
+.chat-bubble.received {
     align-self: flex-start;
+    background: #262d31;
+    color: #e9edef;
+    border-top-left-radius: 2px;
+}
+
+.chat-bubble.sent {
+    align-self: flex-end;
+    background: #005c4b;
+    color: #e9edef;
+    border-top-right-radius: 2px;
 }
 
 .chat-bubble.private {
-    background: rgba(167, 139, 250, 0.1);
-    border: 1px solid rgba(167, 139, 250, 0.2);
-    align-self: flex-start;
+    border: 1px dashed rgba(167, 139, 250, 0.4);
 }
 
 .chat-bubble .sender {
     display: block;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 700;
     margin-bottom: 0.25rem;
+    color: #34d399;
+    /* WhatsApp Green */
+}
+
+.chat-bubble.sent .sender {
     color: #60a5fa;
+    /* Blue for sent to distinguish clearly */
+    text-align: right;
 }
 
 .chat-bubble .time {
     display: block;
-    font-size: 0.7rem;
-    color: #6b7280;
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 0.25rem;
     text-align: right;
 }
