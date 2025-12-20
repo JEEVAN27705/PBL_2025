@@ -13,6 +13,8 @@ import uploadRoutes from './routes/upload.js';
 import viewStatusRoutes from './routes/viewStatus.js';
 import docsRoutes from './routes/docs.js';
 import avatarRoutes from './routes/avatar.js';
+import statsRoutes from './routes/stats.routes.js';
+import chatRoutes from './routes/chat.routes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -51,6 +53,8 @@ export function createApp() {
   app.use('/api/auth', authRoutes);
   app.use('/api/upload', uploadRoutes);
   app.use('/api/avatar', avatarRoutes);
+  app.use('/api', statsRoutes);
+  app.use('/api/chat', chatRoutes);
   app.use('/api', viewStatusRoutes);
   app.use('/api/docs', docsRoutes);
 

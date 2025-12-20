@@ -19,6 +19,7 @@ import ViewStatus from './panels/admin/ViewStatus.jsx';
 // NEW: import the preview page
 import DocumentPreview from './panels/admin/DocumentPreview.jsx';
 import Settings from './panels/admin/Settings.jsx';
+import AdminDashboard from './panels/admin/AdminDashboard.jsx';
 import UserSettings from './panels/user/UserSettings.jsx';
 
 export default function App() {
@@ -49,10 +50,7 @@ export default function App() {
       {/* Protected Routes for admin only */}
       <Route element={<ProtectedRoute allow={['admin']} />}>
         <Route path="/admin" element={<AdminLayout />}>
-          <Route
-            index
-            element={<div style={{ color: '#e5e7eb', padding: 24 }}>Admin Home</div>}
-          />
+          <Route index element={<AdminDashboard />} />
           <Route path="upload" element={<UploadPage />} />
           <Route path="pending" element={<PendingApprovals />} />
           <Route path="archive" element={<DocumentArchive />} />
