@@ -5,6 +5,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import Upload from '../models/Upload.js';
+import PendingUpload from '../models/PendingUpload.js';
+import VerifiedUpload from '../models/VerifiedUpload.js';
+import RejectedUpload from '../models/RejectedUpload.js';
 import { auth } from '../middleware/auth.js';
 import { authorize } from '../middleware/roles.js';
 
@@ -85,6 +88,16 @@ router.put('/:id/status', auth, authorize(['admin']), async (req, res) => {
     doc.verifiedBy = req.user.email || req.user.fullName;
     doc.verifiedAt = new Date();
     await doc.save();
+
+    // 1. Remove from Pending
+    await PendingUpload.findByIdAndDelete(req.params.id);
+
+    // 2. Add to Verified or Rejected
+    const Model = status === 'verified' ? VerifiedUpload : RejectedUpload;
+
+    // Create new doc in target collection with same data
+    const plainDoc = doc.toObject();
+    await Model.create(plainDoc);
 
     return res.json({ message: `Document ${status}`, doc });
   } catch (e) {

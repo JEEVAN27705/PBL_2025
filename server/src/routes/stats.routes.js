@@ -3,6 +3,9 @@ import { Router } from 'express';
 import User from '../models/User.js';
 import Admin from '../models/Admin.js';
 import Upload from '../models/Upload.js';
+import PendingUpload from '../models/PendingUpload.js';
+import VerifiedUpload from '../models/VerifiedUpload.js';
+import RejectedUpload from '../models/RejectedUpload.js';
 import { auth } from '../middleware/auth.js';
 import { authorize } from '../middleware/roles.js';
 
@@ -10,24 +13,23 @@ const router = Router();
 
 router.get('/admin/stats', auth, authorize(['admin']), async (req, res) => {
     try {
-        const [userCount, adminCount, uploadCount, uploads] = await Promise.all([
+        const [userCount, adminCount, uploadCount, pendingCount, verifiedCount, rejectedCount, uploads] = await Promise.all([
             User.countDocuments(),
             Admin.countDocuments(),
             Upload.countDocuments(),
+            PendingUpload.countDocuments(),
+            VerifiedUpload.countDocuments(),
+            RejectedUpload.countDocuments(),
             Upload.find().sort({ createdAt: -1 }).limit(10).lean()
-        ]);
-
-        const statusCounts = await Upload.aggregate([
-            { $group: { _id: '$status', count: { $sum: 1 } } }
         ]);
 
         const stats = {
             users: userCount,
             admins: adminCount,
             totalUploads: uploadCount,
-            pendingUploads: statusCounts.find(s => s._id === 'pending')?.count || 0,
-            verifiedUploads: statusCounts.find(s => s._id === 'verified')?.count || 0,
-            rejectedUploads: statusCounts.find(s => s._id === 'rejected')?.count || 0,
+            pendingUploads: pendingCount,
+            verifiedUploads: verifiedCount,
+            rejectedUploads: rejectedCount,
             recentActivity: uploads.map(u => ({
                 id: u._id,
                 title: u.title,

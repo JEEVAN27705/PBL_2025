@@ -3,7 +3,9 @@ import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
+import mongoose from 'mongoose';
 import Upload from '../models/Upload.js';
+import PendingUpload from '../models/PendingUpload.js';
 
 const router = Router();
 
@@ -58,7 +60,8 @@ router.post('/', upload.array('files', 10), async (req, res) => {
       mimetype: f.mimetype
     }));
 
-    const doc = await Upload.create({
+    const docData = {
+      _id: new mongoose.Types.ObjectId(),
       title: title.trim(),
       type: type || 'pdf',
       verifyDept,
@@ -67,7 +70,12 @@ router.post('/', upload.array('files', 10), async (req, res) => {
       userId,
       userRole: userRole || 'user',
       status: 'pending'
-    });
+    };
+
+    const [doc] = await Promise.all([
+      Upload.create(docData),
+      PendingUpload.create(docData)
+    ]);
 
     return res.status(201).json({
       message: 'Files uploaded successfully',
