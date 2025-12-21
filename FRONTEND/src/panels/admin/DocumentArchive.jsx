@@ -134,7 +134,7 @@ export default function DocumentArchive() {
             onChange={(e) => setTypeFilter(e.target.value)}
             aria-label="Filter by document type"
           >
-            <option value="">Filter by Type</option>
+            <option value="">Filter By Type</option>
             <option value="Exam">Exam</option>
             <option value="Holidays">Holidays</option>
             <option value="Circular">Circular</option>
@@ -147,7 +147,7 @@ export default function DocumentArchive() {
             onChange={(e) => setSortKey(e.target.value)}
             aria-label="Sort documents"
           >
-            <option value="">Sort by Date</option>
+            <option value="">Sort By Date</option>
             <option value="Newest">Newest</option>
             <option value="Oldest">Oldest</option>
           </select>

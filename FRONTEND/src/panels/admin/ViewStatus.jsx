@@ -12,9 +12,14 @@ const API_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE) ||
   'http://localhost:5000';
 
-const STATUS_OPTIONS = ['All', 'Verified', 'Pending', 'Rejected'];
+const STATUS_OPTIONS = [
+  { value: 'All', label: 'Filter By Type' },
+  { value: 'Verified', label: 'Verified' },
+  { value: 'Pending', label: 'Pending' },
+  { value: 'Rejected', label: 'Rejected' }
+];
 const SORT_OPTIONS = [
-  { key: 'date_desc', label: 'Newest first' },
+  { key: 'date_desc', label: 'Sort By Date' },
   { key: 'date_asc', label: 'Oldest first' },
   { key: 'title_asc', label: 'Title A–Z' },
   { key: 'title_desc', label: 'Title Z–A' },
@@ -216,11 +221,11 @@ export default function ViewStatus() {
             value={status}
             onChange={(e) => setStatus(e.target.value)}
           >
-            {STATUS_OPTIONS.map(s => <option key={s} value={s}>{s}</option>)}
+            {STATUS_OPTIONS.map(s => <option key={s.value} value={s.value}>{s.label}</option>)}
           </select>
         </div>
 
-        <div className="vs-pill-select" data-placeholder="Sort by Date">
+        <div className="vs-pill-select">
           <select
             aria-label="Sort by"
             value={sortKey}

@@ -44,6 +44,7 @@
   padding: 12px 16px;
   font-size: 16px;
   transition: border-color .15s, box-shadow .15s, background .15s;
+  font-family: inherit;
 }
 
 .vs-search-first:focus {
@@ -56,42 +57,53 @@
   background: #111b2d;
 }
 
+.vs-search-first::placeholder {
+  font-family: inherit;
+  color: #9fb0c9;
+  opacity: 0.7;
+}
+
 /* Pill select that shows a placeholder label inside (like “Filter by Type”)*/
 .vs-pill-select {
   position: relative;
-  min-width: 210px;
+  min-width: 200px;
   height: 48px;
   border-radius: 10px;
   border: 1px solid #2f3c4f;
   background: #0f1626;
-  display: grid;
+  display: flex;
   align-items: center;
-  padding: 0 42px 0 14px;
-  /* caret spacing */
   color: #e5e7eb;
+  font-family: "Times New Roman", Times, serif;
+  transition: all 0.2s ease;
+  overflow: hidden;
 }
 
 /* Placeholder text shown when select isn't focused/opened */
-.vs-pill-select::before {
-  content: attr(data-placeholder);
-  color: #cfd6e4;
-  opacity: 0.9;
-  font-size: 16px;
-  pointer-events: none;
-}
+/* Removed placeholder label */
 
 /* Native select covers but is fully transparent, so only caret and border visible, matching first image */
 .vs-pill-select select {
-  position: absolute;
-  inset: 0;
   width: 100%;
   height: 100%;
-  opacity: 0;
-  /* hide native text to keep placeholder style */
+  background: transparent;
+  color: #ffffff;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-  cursor: pointer;
+  outline: none;
+  padding: 0 40px 0 16px;
+}
+
+.vs-pill-select select option {
+  background: #1f2937;
+  color: #e5e7eb;
+  font-family: "Times New Roman", Times, serif;
 }
 
 /* Custom caret */
