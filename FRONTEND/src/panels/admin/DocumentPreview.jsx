@@ -1,6 +1,6 @@
 // src/panels/admin/DocumentPreview.jsx
 import React, { useEffect, useState } from 'react';
-import { useLocation, useParams, Link } from 'react-router-dom';
+import { useLocation, useParams, Link, useNavigate } from 'react-router-dom';
 
 const API_BASE =
   (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE) ||
@@ -58,13 +58,15 @@ export default function DocumentPreview() {
   const titleRow = { margin: 0, fontSize: 20, color: '#e5e7eb' };
   const fileName = { marginLeft: 8, color: '#60a5fa', fontWeight: 600 };
 
+  const navigate = useNavigate();
+
   return (
     <div style={{ padding: 16 }}>
       <div style={header}>
-        <Link
-          to="/admin/view"
+        <button
+          onClick={() => navigate(-1)}
           aria-label="Go back"
-          style={iconLink}
+          style={{ ...iconLink, cursor: 'pointer', outline: 'none' }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
           onFocus={() => setHover(true)}
@@ -73,7 +75,7 @@ export default function DocumentPreview() {
         >
           {/* Leftwards arrow (U+2190) */}
           <span aria-hidden="true">←</span>
-        </Link>
+        </button>
 
         <h2 style={titleRow}>
           File name:- <span style={fileName}>{title}</span>
