@@ -1,7 +1,7 @@
 .pa-page {
   padding: 28px 36px 0;
-  font-family: "Times New Roman", Times, serif;
-  color: #cfd6e4;
+  font-family: var(--font-tnr);
+  color: var(--text-primary);
 }
 
 /* Bigger, bolder heading */
@@ -11,7 +11,7 @@
 
 .pa-title {
   font-size: 34px;
-  color: #e8eefb;
+  color: var(--text-primary);
   font-weight: 800;
   margin: 0 0 8px;
   letter-spacing: 0.3px;
@@ -19,7 +19,7 @@
 
 .pa-subtitle {
   margin: 0;
-  color: #9fb0c9;
+  color: var(--text-secondary);
   font-size: 14.5px;
 }
 
@@ -34,9 +34,9 @@
 .pa-search,
 .pa-filter,
 .pa-sort {
-  background: #0f1626;
-  color: #e5e7eb;
-  border: 1px solid #2f3c4f;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
   font-size: 15.5px;
@@ -50,7 +50,7 @@
 
 .pa-search::placeholder {
   font-family: inherit;
-  color: #9fb0c9;
+  color: var(--text-muted);
   opacity: 0.7;
 }
 
@@ -60,7 +60,7 @@
   min-width: 180px;
   width: auto;
   padding: 12px 34px 12px 14px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-tnr);
   font-weight: 700;
   cursor: pointer;
   appearance: none;
@@ -73,15 +73,15 @@
 
 .pa-filter option,
 .pa-sort option {
-  background: #1f2937;
-  color: #e5e7eb;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .pa-search:focus,
 .pa-filter:focus,
 .pa-sort:focus {
   outline: none;
-  border-color: #3a62ff;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(58, 98, 255, 0.25);
 }
 
@@ -89,6 +89,7 @@
 .pa-table-wrap {
   border-radius: 10px;
   overflow: hidden;
+  border: 1px solid var(--border-color);
 }
 
 .pa-table {
@@ -96,20 +97,19 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 16px;
-  color: #d9e0ee;
+  color: var(--text-secondary);
 }
 
 /* Header */
 .pa-table thead th {
-  background: linear-gradient(180deg, #2c3f62, #213150);
-  color: #e9eefb;
+  background: linear-gradient(180deg, var(--bg-hover), var(--bg-secondary));
+  color: var(--text-primary);
   padding: 14px 16px;
   font-size: 14.5px;
   letter-spacing: 0.55px;
   font-weight: 800;
   text-align: left;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+  border-bottom: 1px solid var(--border-color);
   position: relative;
 }
 
@@ -127,14 +127,14 @@
 .pa-table tbody td {
   background: transparent;
   padding: 18px 16px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-top: 1px solid var(--border-color);
   font-size: 15px;
-  color: #cfd6e4;
+  color: var(--text-secondary);
 }
 
 /* Hover */
 .pa-table tbody tr:hover {
-  background: rgba(35, 49, 78, 0.38);
+  background: var(--bg-hover);
 }
 
 /* Alignment helpers */
@@ -150,100 +150,19 @@
   text-align: left;
 }
 
-/* Column widths: equal space for first three columns */
-.pa-table thead th:nth-child(1),
-.pa-table tbody td:nth-child(1) {
-  width: 26.66%;
-  text-align: left;
-}
-
-/* Title */
-
-.pa-table thead th:nth-child(2),
-.pa-table tbody td:nth-child(2) {
-  width: 26.66%;
-  text-align: left;
-}
-
-/* Type */
-
-.pa-table thead th:nth-child(3),
-.pa-table tbody td:nth-child(3) {
-  width: 26.66%;
-  text-align: left;
-}
-
-/* Submitted By */
-
-/* Action column: centered header, right-aligned cells */
-.pa-table thead th:nth-child(4) {
-  width: 20%;
-  text-align: center;
-  padding-right: 18px;
-}
-
-.pa-table tbody td:nth-child(4) {
-  text-align: right;
-  padding-right: 22px;
-}
-
-/* Equal paddings */
-.pa-table thead th,
-.pa-table tbody td {
-  padding-left: 18px;
-  padding-right: 18px;
-}
-
-/* No-wrap stability; titles may wrap */
-.pa-table thead th,
-.pa-table tbody td {
-  white-space: nowrap;
-}
-
-.pa-title-cell {
-  white-space: normal;
-}
-
-/* Actions layout */
-.pa-actions {
-  text-align: right;
-  white-space: nowrap;
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-}
-
-/* Legacy button */
-.pa-btn {
-  border: 1px solid transparent;
-  padding: 8px 10px;
-  font-size: 14px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.12s, color 0.12s, border-color 0.12s, transform 0.06s;
-}
-
-.pa-btn:active {
-  transform: translateY(1px);
-}
-
 /* GREEN Approved pill */
 .btn-approve-pill {
-  --green: #16a34a;
-  --green-dark: #12873e;
-  --green-border: #e6ffe6;
-
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
-  min-width: 92px;
+  padding: 6px 8px;
+  min-width: 84px;
   justify-content: center;
-  background: var(--green);
+  background: #16a34a;
   color: #ffffff;
-  border: 2px solid var(--green-border);
+  border: 2px solid #e6ffe6;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: .3px;
   cursor: pointer;
@@ -257,45 +176,31 @@
   content: "✓";
   display: inline-grid;
   place-items: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 999px;
   background: #ffffff;
-  color: var(--green);
+  color: #16a34a;
   font-weight: 900;
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.btn-approve-pill:hover {
-  background: var(--green-dark);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .12);
-}
-
-.btn-approve-pill:active {
-  transform: translateY(1px);
-}
-
-/* BLUE View pill */
 .btn-view-pill {
-  --blue: #2563eb;
-  --blue-dark: #1e4ec2;
-
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
-  min-width: 92px;
+  padding: 6px 8px;
+  min-width: 84px;
   justify-content: center;
-  background: var(--blue);
+  background: var(--accent-primary);
   color: #ffffff;
   border: 2px solid #e6efff;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: .2px;
   cursor: pointer;
   line-height: 1;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .08);
   transition: background .15s ease, transform .06s ease, box-shadow .15s ease;
 }
 
@@ -303,45 +208,31 @@
   content: "👁";
   display: inline-grid;
   place-items: center;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border-radius: 999px;
   background: #ffffff;
-  color: var(--blue);
+  color: var(--accent-primary);
   font-size: 11px;
   line-height: 1;
 }
 
-.btn-view-pill:hover {
-  background: var(--blue-dark);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .12);
-}
-
-.btn-view-pill:active {
-  transform: translateY(1px);
-}
-
-/* RED Reject pill */
 .btn-reject-pill {
-  --red: #b91c1c;
-  --red-dark: #991b1b;
-
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
-  min-width: 92px;
+  padding: 6px 8px;
+  min-width: 84px;
   justify-content: center;
-  background: var(--red);
-  color: #ffe5e5;
+  background: #b91c1c;
+  color: #ffffff;
   border: 2px solid #ffe6e6;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: .2px;
   cursor: pointer;
   line-height: 1;
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .06);
   transition: background .15s ease, transform .06s ease, box-shadow .15s ease;
 }
 
@@ -349,44 +240,17 @@
   content: "✕";
   display: inline-grid;
   place-items: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 999px;
-  background: #ffffff;
-  color: var(--red);
-  font-weight: 900;
-  font-size: 12px;
-}
-
-.btn-reject-pill:hover {
-  background: var(--red-dark);
-  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, .12);
-}
-
-.btn-reject-pill:active {
-  transform: translateY(1px);
-}
-
-/* Compact variant: slightly smaller action pills */
-.btn-approve-pill,
-.btn-view-pill,
-.btn-reject-pill {
-  padding: 6px 8px;
-  /* compact */
-  font-size: 13px;
-  min-width: 84px;
-}
-
-.btn-approve-pill::before,
-.btn-view-pill::before,
-.btn-reject-pill::before {
   width: 14px;
   height: 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #b91c1c;
+  font-weight: 900;
   font-size: 11px;
 }
 
 .pa-empty {
-  color: #9fb0c9;
+  color: var(--text-muted);
   padding: 24px;
 }
 
@@ -401,10 +265,5 @@
   .pa-sort {
     flex: 1 1 220px;
     min-width: 0;
-  }
-
-  .pa-actions {
-    text-align: left;
-    padding-right: 0;
   }
 }

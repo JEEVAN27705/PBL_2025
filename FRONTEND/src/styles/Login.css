@@ -8,17 +8,16 @@
 body {
   margin: 0;
   padding: 0;
-  background: #050b14;
-  /* Match admin panel base */
-  font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-  color: #f3f4f6;
+  background: var(--bg-primary);
+  font-family: var(--font-inter);
+  color: var(--text-primary);
   overflow-x: hidden;
 }
 
-/* App shell with a vibrant deep gradient */
+/* App shell */
 .app {
   min-height: 100vh;
-  background: radial-gradient(circle at top right, #1a2a44 0%, #050b14 70%);
+  background: var(--bg-primary);
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -37,13 +36,13 @@ body {
 .login-container {
   width: 100%;
   max-width: 440px;
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--bg-secondary);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 48px 40px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
   animation: fadeInScale 0.6s ease-out;
 }
 
@@ -66,11 +65,11 @@ body {
 }
 
 .welcome-title {
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-tnr);
   font-size: 38px;
   font-weight: 700;
   margin-bottom: 12px;
-  background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+  background: linear-gradient(135deg, var(--text-primary) 0%, var(--text-secondary) 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;

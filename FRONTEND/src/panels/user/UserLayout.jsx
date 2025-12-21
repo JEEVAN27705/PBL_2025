@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate, useLocation } from 'react-router-dom';
 import { FiMessageSquare, FiClock, FiBookmark, FiLogOut, FiUser, FiSettings } from 'react-icons/fi';
 import './user.css';
+import ThemeToggle from '../../components/ThemeToggle';
 
 const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env?.VITE_API_BASE) || 'http://localhost:5000';
 
@@ -117,6 +118,9 @@ export default function UserLayout() {
       </aside>
 
       <main className="user-main">
+        <div style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 1000 }}>
+          <ThemeToggle />
+        </div>
         <Outlet />
       </main>
     </div>

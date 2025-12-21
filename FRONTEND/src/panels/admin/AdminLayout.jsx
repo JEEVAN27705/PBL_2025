@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, NavLink, Link } from 'react-router-dom';
 import './admin.css';
+import ThemeToggle from '../../components/ThemeToggle';
 
 import {
   FiHome, FiUpload, FiFolder, FiArchive, FiSettings, FiEye, FiLogOut, FiUser,
@@ -145,6 +146,9 @@ export default function AdminLayout() {
       </aside>
 
       <main className="admin-main">
+        <div style={{ position: 'absolute', top: '24px', right: '24px', zIndex: 1000 }}>
+          <ThemeToggle />
+        </div>
         <Outlet />
       </main>
     </div>

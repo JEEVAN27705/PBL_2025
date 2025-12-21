@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    /* Common variables */
+    --font-tnr: "Times New Roman", Times, serif;
+    --font-inter: 'Inter', sans-serif;
+    --transition-speed: 0.3s;
+}
+
+/* Dark Theme (Default) */
+[data-theme='dark'] {
+    --bg-primary: #0b1220;
+    --bg-secondary: #0f172a;
+    --bg-sidebar: #0f172a;
+    --bg-card: #0f1626;
+    --bg-input: #0f1626;
+    --bg-hover: #162238;
+    --bg-active: #1e293b;
+
+    --text-primary: #e5e7eb;
+    --text-secondary: #9fb0c9;
+    --text-muted: #6b7280;
+    --text-white: #ffffff;
+
+    --border-color: #1f2937;
+    --border-subtle: #2f3c4f;
+
+    --accent-primary: #3a62ff;
+    --accent-secondary: #2563eb;
+    --accent-hover: #5c86ff;
+
+    --status-verified-bg: rgba(36, 168, 104, 0.18);
+    --status-verified-text: #8af0a2;
+    --status-pending-bg: rgba(168, 132, 36, 0.18);
+    --status-pending-text: #f0d28a;
+    --status-rejected-bg: rgba(194, 43, 62, 0.18);
+    --status-rejected-text: #ff9aa4;
+}
+
+/* Light Theme */
+[data-theme='light'] {
+    --bg-primary: #f8fafc;
+    --bg-secondary: #ffffff;
+    --bg-sidebar: #ffffff;
+    --bg-card: #ffffff;
+    --bg-input: #f1f5f9;
+    --bg-hover: #f1f5f9;
+    --bg-active: #e2e8f0;
+
+    --text-primary: #0f172a;
+    --text-secondary: #475569;
+    --text-muted: #64748b;
+    --text-white: #ffffff;
+
+    --border-color: #e2e8f0;
+    --border-subtle: #cbd5e1;
+
+    --accent-primary: #2563eb;
+    --accent-secondary: #1d4ed8;
+    --accent-hover: #3b82f6;
+
+    --status-verified-bg: #dcfce7;
+    --status-verified-text: #166534;
+    --status-pending-bg: #fef9c3;
+    --status-pending-text: #854d0e;
+    --status-rejected-bg: #fee2e2;
+    --status-rejected-text: #991b1b;
+}
+
+body {
+    margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-tnr);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}

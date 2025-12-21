@@ -1,35 +1,18 @@
 /* Page container */
 .doc-archive-page {
   padding: 28px 36px 0;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-tnr);
 }
 
 /* Larger, bold title with accent underline and extra spacing below */
 .doc-archive-title {
   font-size: 34px;
-  /* bigger title */
-  color: #e5e7eb;
+  color: var(--text-primary);
   font-weight: 800;
-  /* strong bold */
   margin: 0 0 22px;
-  /* space before toolbar */
   letter-spacing: 0.2px;
   position: relative;
 }
-
-/*
-.doc-archive-title::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -8px;
-  width: 56px;
-  height: 2px;
-  background: #3a62ff;
-  border-radius: 2px;
-  opacity: .9;
-}
-*/
 
 /* Full-width container with no border/background */
 .doc-archive-card {
@@ -54,9 +37,9 @@
 .doc-search,
 .doc-filter,
 .doc-sort {
-  background: #0f1626;
-  color: #e5e7eb;
-  border: 1px solid #2f3c4f;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 16px;
   transition: border-color .15s, box-shadow .15s, background .15s;
@@ -65,9 +48,9 @@
 .doc-search {
   flex: 1;
   padding: 12px 18px;
-  background: #0f1626;
-  color: #e5e7eb;
-  border: 1px solid #2f3c4f;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   font-size: 15.5px;
   transition: all 0.15s;
@@ -75,7 +58,7 @@
 }
 
 .doc-search::placeholder {
-  color: #9fb0c9;
+  color: var(--text-muted);
   opacity: 0.7;
 }
 
@@ -85,11 +68,11 @@
   padding: 12px 34px 12px 16px;
   min-width: 180px;
   width: auto;
-  background: #0f1626;
-  color: #e5e7eb;
-  border: 1px solid #2f3c4f;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-tnr);
   font-weight: 700;
   cursor: pointer;
   appearance: none;
@@ -102,15 +85,15 @@
 
 .doc-filter option,
 .doc-sort option {
-  background: #1f2937;
-  color: #e5e7eb;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .doc-search:focus,
 .doc-filter:focus,
 .doc-sort:focus {
   outline: none;
-  border-color: #3a62ff;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(58, 98, 255, .25);
 }
 
@@ -120,18 +103,18 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 16px;
-  color: #cfd6e4;
+  color: var(--text-secondary);
 }
 
 /* Header with rounded extremes, professional contrast */
 .doc-archive-table thead th {
-  background: linear-gradient(180deg, #243251, #1f2a3f);
-  color: #e8eefb;
+  background: linear-gradient(180deg, var(--bg-hover), var(--bg-secondary));
+  color: var(--text-primary);
   padding: 12px 14px;
   font-size: 14.5px;
   letter-spacing: .6px;
   font-weight: 700;
-  border-top: 1px solid #2a3856;
+  border-top: 1px solid var(--border-color);
   text-align: center;
 }
 
@@ -147,13 +130,11 @@
 /* Row cells with extra vertical space (makes rows breathe) */
 .doc-archive-table tbody td {
   padding: 18px 14px;
-  /* more vertical space */
-  border-top: 1px solid #1d2840;
+  border-top: 1px solid var(--border-color);
   background: transparent;
   font-size: 15px;
 }
 
-/* Alignment: left for long titles, center for others */
 .doc-title-cell {
   text-align: left;
 }
@@ -164,32 +145,12 @@
 
 /* Soft zebra + hover */
 .doc-archive-table tbody tr:nth-child(odd) {
-  background: rgba(19, 26, 38, 0.35);
+  background: var(--bg-secondary);
+  opacity: 0.8;
 }
 
 .doc-archive-table tbody tr:hover {
-  background: #162238;
-}
-
-/* Column widths to keep balance on wide screens */
-.doc-archive-table thead th:nth-child(1),
-.doc-archive-table tbody td:nth-child(1) {
-  width: 48%;
-}
-
-.doc-archive-table thead th:nth-child(2),
-.doc-archive-table tbody td:nth-child(2) {
-  width: 16%;
-}
-
-.doc-archive-table thead th:nth-child(3),
-.doc-archive-table tbody td:nth-child(3) {
-  width: 20%;
-}
-
-.doc-archive-table thead th:nth-child(4),
-.doc-archive-table tbody td:nth-child(4) {
-  width: 16%;
+  background: var(--bg-hover);
 }
 
 /* Action buttons: consistent, interactive, with danger style */
@@ -204,7 +165,7 @@
 .doc-action-btn {
   background: none;
   border: none;
-  color: #9fb0c9;
+  color: var(--text-secondary);
   font-size: 18px;
   cursor: pointer;
   line-height: 1;
@@ -218,8 +179,8 @@
 }
 
 .doc-action-btn:hover {
-  background: #1a2a47;
-  color: #5c86ff;
+  background: var(--bg-hover);
+  color: var(--accent-primary);
 }
 
 .doc-action-btn:active {
@@ -227,7 +188,7 @@
 }
 
 .doc-action-btn.danger:hover {
-  background: #2a1a1a;
+  background: var(--status-rejected-bg);
   color: #ff6b6b;
 }
 

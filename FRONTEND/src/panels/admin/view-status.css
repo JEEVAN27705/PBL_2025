@@ -1,13 +1,13 @@
 /* Page container */
 .vs-page {
   padding: 28px 36px 0;
-  font-family: "Times New Roman", Times, serif;
+  font-family: var(--font-tnr);
 }
 
 /* Title */
 .vs-title {
   font-size: 34px;
-  color: #e5e7eb;
+  color: var(--text-primary);
   font-weight: 800;
   margin: 0 0 22px;
   letter-spacing: 0.2px;
@@ -36,9 +36,9 @@
 
 /* Search input (left) */
 .vs-search-first {
-  background: #0f1626;
-  color: #e5e7eb;
-  border: 1px solid #2f3c4f;
+  background: var(--bg-input);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   height: 48px;
   padding: 12px 16px;
@@ -49,17 +49,17 @@
 
 .vs-search-first:focus {
   outline: none;
-  border-color: #3a62ff;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(58, 98, 255, .25);
 }
 
 .vs-search-first:hover {
-  background: #111b2d;
+  background: var(--bg-hover);
 }
 
 .vs-search-first::placeholder {
   font-family: inherit;
-  color: #9fb0c9;
+  color: var(--text-muted);
   opacity: 0.7;
 }
 
@@ -69,25 +69,22 @@
   min-width: 200px;
   height: 48px;
   border-radius: 10px;
-  border: 1px solid #2f3c4f;
-  background: #0f1626;
+  border: 1px solid var(--border-color);
+  background: var(--bg-input);
   display: flex;
   align-items: center;
-  color: #e5e7eb;
-  font-family: "Times New Roman", Times, serif;
+  color: var(--text-primary);
+  font-family: var(--font-tnr);
   transition: all 0.2s ease;
   overflow: hidden;
 }
-
-/* Placeholder text shown when select isn't focused/opened */
-/* Removed placeholder label */
 
 /* Native select covers but is fully transparent, so only caret and border visible, matching first image */
 .vs-pill-select select {
   width: 100%;
   height: 100%;
   background: transparent;
-  color: #ffffff;
+  color: var(--text-primary);
   border: none;
   font-size: 16px;
   font-weight: 700;
@@ -101,9 +98,9 @@
 }
 
 .vs-pill-select select option {
-  background: #1f2937;
-  color: #e5e7eb;
-  font-family: "Times New Roman", Times, serif;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  font-family: var(--font-tnr);
 }
 
 /* Custom caret */
@@ -117,13 +114,13 @@
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: 7px solid #cfd6e4;
+  border-top: 7px solid var(--text-secondary);
   pointer-events: none;
 }
 
 /* Focus ring when user opens/targets the select */
 .vs-pill-select:has(select:focus) {
-  border-color: #3a62ff;
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 2px rgba(58, 98, 255, .25);
 }
 
@@ -133,18 +130,18 @@
   border-collapse: separate;
   border-spacing: 0;
   font-size: 16px;
-  color: #cfd6e4;
+  color: var(--text-secondary);
 }
 
 /* Header */
 .vs-table thead th {
-  background: linear-gradient(180deg, #243251, #1f2a3f);
-  color: #e8eefb;
+  background: linear-gradient(180deg, var(--bg-hover), var(--bg-secondary));
+  color: var(--text-primary);
   padding: 12px 14px;
   font-size: 14.5px;
   letter-spacing: .6px;
   font-weight: 700;
-  border-top: 1px solid #2a3856;
+  border-top: 1px solid var(--border-color);
   text-align: center;
 }
 
@@ -160,7 +157,7 @@
 /* Body rows */
 .vs-table tbody td {
   padding: 16px 14px;
-  border-top: 1px solid #1d2840;
+  border-top: 1px solid var(--border-color);
   background: transparent;
   font-size: 15px;
 }
@@ -175,65 +172,40 @@
 
 /* Zebra + hover */
 .vs-table tbody tr:nth-child(odd) {
-  background: rgba(19, 26, 38, 0.35);
+  background: var(--bg-secondary);
+  opacity: 0.8;
 }
 
 .vs-table tbody tr:hover {
-  background: #162238;
-}
-
-/* Column widths */
-.vs-table thead th:nth-child(1),
-.vs-table tbody td:nth-child(1) {
-  width: 35%;
-}
-
-.vs-table thead th:nth-child(2),
-.vs-table tbody td:nth-child(2) {
-  width: 14%;
-}
-
-.vs-table thead th:nth-child(3),
-.vs-table tbody td:nth-child(3) {
-  width: 16%;
-}
-
-.vs-table thead th:nth-child(4),
-.vs-table tbody td:nth-child(4) {
-  width: 18%;
-}
-
-.vs-table thead th:nth-child(5),
-.vs-table tbody td:nth-child(5) {
-  width: 17%;
+  background: var(--bg-hover);
 }
 
 /* Status pills */
 .vs-pill {
   display: inline-block;
   padding: 6px 12px;
-  border-radius: 999px;
-  font-size: 12.5px;
+  border-radius: 9999px;
+  font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.2px;
 }
 
 .vs-pill.verified {
-  color: #8af0a2;
-  background: rgba(36, 168, 104, 0.18);
-  border: 1px solid rgba(36, 168, 104, 0.35);
+  color: var(--status-verified-text);
+  background: var(--status-verified-bg);
+  border: 1px solid var(--status-verified-text);
 }
 
 .vs-pill.pending {
-  color: #f0d28a;
-  background: rgba(168, 132, 36, 0.18);
-  border: 1px solid rgba(168, 132, 36, 0.35);
+  color: var(--status-pending-text);
+  background: var(--status-pending-bg);
+  border: 1px solid var(--status-pending-text);
 }
 
 .vs-pill.rejected {
-  color: #ff9aa4;
-  background: rgba(194, 43, 62, 0.18);
-  border: 1px solid rgba(194, 43, 62, 0.35);
+  color: var(--status-rejected-text);
+  background: var(--status-rejected-bg);
+  border: 1px solid var(--status-rejected-text);
 }
 
 /* Action buttons */
@@ -248,7 +220,7 @@
 .vs-action-btn {
   background: none;
   border: none;
-  color: #9fb0c9;
+  color: var(--text-secondary);
   font-size: 18px;
   cursor: pointer;
   line-height: 1;
@@ -262,8 +234,8 @@
 }
 
 .vs-action-btn:hover {
-  background: #1a2a47;
-  color: #5c86ff;
+  background: var(--bg-hover);
+  color: var(--accent-primary);
 }
 
 .vs-action-btn:active {
@@ -271,7 +243,7 @@
 }
 
 .vs-action-btn.danger:hover {
-  background: #2a1a1a;
+  background: var(--status-rejected-bg);
   color: #ff6b6b;
 }
 
