@@ -3,6 +3,7 @@ import '../styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerRequest } from '../api/auth/register';
 import CustomDropdown from './common/CustomDropdown';
+import ThemeToggle from './ThemeToggle';
 
 export default function Register() {
   const [fullName, setFullName] = useState('');
@@ -93,6 +94,9 @@ export default function Register() {
 
   return (
     <div className="app">
+      <div className="theme-toggle-wrapper">
+        <ThemeToggle />
+      </div>
       <main className="main-content">
         <div className="login-container">
           <div className="welcome-section">

@@ -23,6 +23,14 @@ body {
   justify-content: center;
   align-items: center;
   padding: 20px;
+  position: relative;
+}
+
+.theme-toggle-wrapper {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
 }
 
 .main-content {
@@ -42,7 +50,7 @@ body {
   border: 1px solid var(--border-color);
   border-radius: 24px;
   padding: 48px 40px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
   animation: fadeInScale 0.6s ease-out;
 }
 
@@ -78,7 +86,7 @@ body {
 
 .welcome-subtitle {
   font-size: 16px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   line-height: 1.5;
 }
 
@@ -96,23 +104,23 @@ body {
 .form-input {
   width: 100%;
   padding: 16px 20px;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  color: #fff;
+  color: var(--text-primary);
   font-size: 16px;
   outline: none;
   transition: all 0.3s ease;
 }
 
 .form-input:focus {
-  background: rgba(30, 41, 59, 0.8);
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .form-input::placeholder {
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 /* Custom Dropdown Styling */
@@ -124,10 +132,10 @@ body {
 .dropdown-trigger {
   width: 100%;
   padding: 16px 20px;
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
-  color: #fff;
+  color: var(--text-primary);
   font-family: "Times New Roman", Times, serif;
   font-size: 18px;
   display: flex;
@@ -140,24 +148,24 @@ body {
 
 .custom-dropdown.active .dropdown-trigger,
 .dropdown-trigger:focus {
-  background: rgba(30, 41, 59, 0.8);
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+  background: var(--bg-hover);
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
 }
 
 .placeholder-text {
-  color: #64748b;
+  color: var(--text-muted);
 }
 
 .dropdown-arrow {
   font-size: 20px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   transition: transform 0.3s ease;
 }
 
 .dropdown-arrow.rotated {
   transform: rotate(180deg);
-  color: #3b82f6;
+  color: var(--accent-primary);
 }
 
 .dropdown-menu {
@@ -165,14 +173,14 @@ body {
   top: calc(100% + 8px);
   left: 0;
   width: 100%;
-  background: rgba(15, 23, 42, 0.95);
+  background: var(--bg-card);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 8px;
   list-style: none;
   z-index: 1000;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
   animation: slideInUp 0.2s ease-out;
 }
 
@@ -194,18 +202,18 @@ body {
   cursor: pointer;
   font-family: "Times New Roman", Times, serif;
   font-size: 17px;
-  color: #cbd5e1;
+  color: var(--text-secondary);
   transition: all 0.2s ease;
 }
 
 .dropdown-item:hover {
-  background: rgba(59, 130, 246, 0.1);
-  color: #fff;
+  background: var(--bg-hover);
+  color: var(--text-primary);
 }
 
 .dropdown-item.selected {
-  background: #3b82f6;
-  color: #fff;
+  background: var(--accent-primary);
+  color: var(--text-white);
 }
 
 /* Signup/Switch Section */
@@ -216,19 +224,19 @@ body {
   gap: 10px;
   cursor: pointer;
   font-size: 14px;
-  color: #94a3b8;
+  color: var(--text-secondary);
   transition: color 0.2s;
 }
 
 .checkbox-container:hover {
-  color: #cbd5e1;
+  color: var(--text-primary);
 }
 
 .checkbox-input {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--border-color);
   background: transparent;
   cursor: pointer;
 }
@@ -237,7 +245,7 @@ body {
 .login-button {
   width: 100%;
   padding: 16px;
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, var(--accent-secondary) 0%, var(--accent-primary) 100%);
   color: white;
   border: none;
   border-radius: 12px;
@@ -251,7 +259,7 @@ body {
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 20px 25px -5px rgba(37, 99, 235, 0.4);
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-hover) 100%);
 }
 
 .login-button:active:not(:disabled) {
@@ -261,7 +269,7 @@ body {
 .login-button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-  background: #4b5563;
+  background: var(--text-muted);
   box-shadow: none;
 }
 
@@ -272,14 +280,14 @@ body {
 }
 
 .signup-text {
-  color: #94a3b8;
+  color: var(--text-secondary);
   font-family: "Times New Roman", Times, serif;
   font-size: 17px;
 }
 
 .signup-link,
 .link {
-  color: #3b82f6;
+  color: var(--accent-primary);
   text-decoration: none;
   font-family: "Times New Roman", Times, serif;
   font-weight: 700;
@@ -290,7 +298,7 @@ body {
 
 .signup-link:hover,
 .link:hover {
-  color: #60a5fa;
+  color: var(--accent-hover);
   text-decoration: underline;
 }
 

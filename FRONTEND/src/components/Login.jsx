@@ -3,6 +3,7 @@ import '../styles/Login.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginRequest } from '../api/auth/login';
 import CustomDropdown from './common/CustomDropdown';
+import ThemeToggle from './ThemeToggle';
 
 export default function Login() {
   const [username, setUsername] = useState('');
@@ -64,6 +65,9 @@ export default function Login() {
 
   return (
     <div className="app">
+      <div className="theme-toggle-wrapper">
+        <ThemeToggle />
+      </div>
       <main className="main-content">
         <div className="login-container">
           <div className="welcome-section">
