@@ -4,6 +4,7 @@ import app from './app.js';
 import { connectDatabase } from './config/database.js';
 import { initializeAI } from './services/aiService.js';
 import logger from './utils/logger.js';
+import indexWatcher from './services/indexWatcher.js';
 import DocumentIndex from './models/DocumentIndex.js';
 
 // Load environment variables
@@ -31,6 +32,13 @@ const startServer = async () => {
                 .catch(err => logger.warn('Could not create text index on DocumentIndex.chunkText', { error: err.message }));
         } catch (err) {
             logger.warn('Text index creation failed (non-fatal)', { error: err.message });
+        }
+
+        // Start automatic indexing watcher (change streams or polling fallback)
+        try {
+            indexWatcher.startIndexWatcher();
+        } catch (err) {
+            logger.warn('Failed to start index watcher', { error: err.message });
         }
 
         // Start Express server
