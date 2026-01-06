@@ -99,6 +99,27 @@ router.put('/:id/status', auth, authorize(['admin']), async (req, res) => {
     const plainDoc = doc.toObject();
     await Model.create(plainDoc);
 
+    // Trigger AI Ingestion if Verified
+    if (status === 'verified') {
+      try {
+        const FormData = (await import('form-data')).default;
+        const fetch = (await import('node-fetch')).default || global.fetch;
+        const fs = (await import('fs')).default;
+
+        if (doc.files && doc.files.length) {
+          for (const f of doc.files) {
+            const absPath = path.isAbsolute(f.path) ? f.path : path.join(uploadsRoot, f.path);
+            if (fs.existsSync(absPath)) {
+              const formData = new FormData();
+              formData.append('file', fs.createReadStream(absPath));
+              fetch('http://localhost:8000/ingest', { method: 'POST', body: formData })
+                .catch(err => console.error('AI Ingestion failed:', err.message));
+            }
+          }
+        }
+      } catch (aiErr) { console.error('AI Trigger Error:', aiErr); }
+    }
+
     return res.json({ message: `Document ${status}`, doc });
   } catch (e) {
     console.error('UPDATE STATUS ERROR:', e);

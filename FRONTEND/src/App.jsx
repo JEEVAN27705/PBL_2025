@@ -9,7 +9,6 @@ import ScrollToTop from './components/ScrollToTop.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 
 import UserLayout from './panels/user/UserLayout.jsx';
-import ChatPage from './panels/user/ChatPage.jsx';
 
 import AdminLayout from './panels/admin/AdminLayout.jsx';
 import UploadPage from './panels/admin/UploadPage.jsx';
@@ -22,6 +21,7 @@ import DocumentPreview from './panels/admin/DocumentPreview.jsx';
 import Settings from './panels/admin/Settings.jsx';
 import AdminDashboard from './panels/admin/AdminDashboard.jsx';
 import UserSettings from './panels/user/UserSettings.jsx';
+import AIChat from './panels/user/AIChat.jsx';
 
 export default function App() {
   return (
@@ -37,16 +37,9 @@ export default function App() {
         {/* Protected Routes for both user and admin */}
         <Route element={<ProtectedRoute allow={['user', 'admin']} />}>
           <Route path="/user" element={<UserLayout />}>
-            <Route index element={<ChatPage />} />
+            <Route index element={<Navigate to="/user/settings" replace />} />
+            <Route path="chat" element={<AIChat />} />
             <Route path="settings" element={<UserSettings />} />
-            <Route
-              path="history"
-              element={<div style={{ color: '#e5e7eb', padding: 24 }}>History</div>}
-            />
-            <Route
-              path="saved"
-              element={<div style={{ color: '#e5e7eb', padding: 24 }}>Saved Prompts</div>}
-            />
           </Route>
         </Route>
 

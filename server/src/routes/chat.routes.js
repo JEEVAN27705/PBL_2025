@@ -84,4 +84,34 @@ router.post('/', auth, async (req, res) => {
     }
 });
 
+router.post('/ask', auth, async (req, res) => {
+    try {
+        const { query, language } = req.body;
+        if (!query) return res.status(400).json({ message: 'Query required' });
+
+        // Call Python AI Service
+        const fetch = global.fetch || (await import('node-fetch')).default;
+
+        const response = await fetch('http://localhost:8000/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: query, language: language || 'auto' })
+        });
+
+        if (!response.ok) {
+            throw new Error(`AI Service responded with ${response.status}`);
+        }
+
+        const data = await response.json();
+        return res.json(data);
+
+    } catch (e) {
+        console.error('AI chat error:', e);
+        return res.status(500).json({
+            message: 'Failed to get answer from AI',
+            response: "I'm having trouble connecting to my brain right now. Please try again later."
+        });
+    }
+});
+
 export default router;

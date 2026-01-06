@@ -31,7 +31,7 @@ export function createApp() {
   const allowedOrigin = process.env.CORS_ORIGIN || 'http://localhost:5173';
   app.use(
     cors({
-      origin: allowedOrigin,
+      origin: true, // Auto-reflect the requesting origin (for dev)
       credentials: true,
       exposedHeaders: ['Content-Disposition'],
       methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], // allow DELETE for preflight [web:111][web:137]

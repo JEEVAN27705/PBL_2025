@@ -6,6 +6,8 @@ import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import Upload from '../models/Upload.js';
 import PendingUpload from '../models/PendingUpload.js';
+import VerifiedUpload from '../models/VerifiedUpload.js';
+import RejectedUpload from '../models/RejectedUpload.js';
 
 const router = Router();
 
@@ -77,6 +79,25 @@ router.post('/', upload.array('files', 10), async (req, res) => {
       PendingUpload.create(docData)
     ]);
 
+    // Trigger AI Ingestion
+    try {
+      if (files.length > 0) {
+        const FormData = (await import('form-data')).default;
+        const fetch = (await import('node-fetch')).default || global.fetch;
+        const fs = (await import('fs')).default;
+
+        for (const file of files) {
+          const formData = new FormData();
+          formData.append('file', fs.createReadStream(file.path));
+
+          fetch('http://localhost:8000/ingest', { method: 'POST', body: formData })
+            .catch(err => console.error('AI Ingestion failed:', err.message));
+        }
+      }
+    } catch (aiOpsErr) {
+      console.error("AI Trigger Error:", aiOpsErr.message);
+    }
+
     return res.status(201).json({
       message: 'Files uploaded successfully',
       data: {
@@ -100,6 +121,7 @@ router.post('/', upload.array('files', 10), async (req, res) => {
     return res.status(500).json({ message: 'Upload failed', error: err.message });
   }
 });
+
 
 // GET /api/upload/user/:userId
 router.get('/user/:userId', async (req, res) => {
@@ -149,8 +171,15 @@ router.delete('/:uploadId', async (req, res) => {
       fs.unlink(f.path, e => e && console.error('File delete error:', e));
     });
 
-    await item.deleteOne();
-    return res.json({ message: 'Upload deleted' });
+    await Promise.all([
+      item.deleteOne(),
+      PendingUpload.deleteMany({ _id: req.params.uploadId }),
+      VerifiedUpload.deleteMany({ _id: req.params.uploadId }),
+      RejectedUpload.deleteMany({ _id: req.params.uploadId })
+    ]);
+
+
+    return res.json({ message: 'Upload deleted from all records' });
   } catch (err) {
     console.error('Delete upload error:', err);
     return res.status(500).json({ message: 'Failed to delete upload', error: err.message });

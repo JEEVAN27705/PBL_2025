@@ -16,7 +16,8 @@ export default function UserLayout() {
       const token = localStorage.getItem('accessToken');
       if (!token) return;
       const res = await fetch(`${API_BASE.replace(/\/+$/, '')}/api/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${token}` },
+        credentials: 'include'
       });
       if (res.ok) {
         const data = await res.json();
@@ -64,9 +65,7 @@ export default function UserLayout() {
   };
 
   const navItems = [
-    { label: 'Chat with AI', path: '/user', icon: <FiMessageSquare /> },
-    { label: 'Conversation History', path: '/user/history', icon: <FiClock /> },
-    { label: 'Saved Prompts', path: '/user/saved', icon: <FiBookmark /> },
+    { label: 'AI Assistant', path: '/user/chat', icon: <FiMessageSquare /> },
     { label: 'Settings', path: '/user/settings', icon: <FiSettings /> },
   ];
 
