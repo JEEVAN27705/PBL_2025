@@ -14,7 +14,7 @@ import { authorize } from '../middleware/roles.js';
 const router = Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const uploadsRoot = path.join(__dirname, '../uploads'); // adjust if needed
+const uploadsRoot = path.join(__dirname, '../../uploads'); // adjust if needed
 
 // Utility to resolve first file of an Upload doc
 async function resolveFirstFile(id) {

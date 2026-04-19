@@ -95,7 +95,11 @@ router.post('/ask', auth, async (req, res) => {
         const response = await fetch('http://localhost:8000/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ text: query, language: language || 'auto' })
+            body: JSON.stringify({
+                text: query,
+                language: language || 'auto',
+                user_id: req.user._id ? req.user._id.toString() : 'guest'
+            })
         });
 
         if (!response.ok) {

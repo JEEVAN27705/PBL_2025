@@ -9,3 +9,6 @@ pymupdf
 python-multipart
 uvloop; sys_platform != 'win32'
 httpx
+pdfplumber
+easyocr
+opencv-python-headless
